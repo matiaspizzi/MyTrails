@@ -699,14 +699,14 @@ end
     end
   end
 
-  # config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # config.action_mailer.default_url_options = { host: "localhost", port: 3001 }
   # config.action_mailer.delivery_method = :letter_opener
   # config.action_mailer.perform_deliveries = true
 
   def add_letter_opener_configuration
-    gsub_file 'config/environments/development.rb', /  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }/m do
+    gsub_file 'config/environments/development.rb', /  config.action_mailer.default_url_options = { host: "localhost", port: 3001 }/m do
       <<-RUBY
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: "localhost", port: 3001 }
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
       RUBY

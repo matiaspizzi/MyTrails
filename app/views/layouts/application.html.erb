@@ -24,8 +24,13 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
+    <main class="flex flex-col justify-center items-center min-h-screen min-w-screen">
+      <%= render 'shared/flash' %>
+      <%= render 'shared/menu' %>
+      <div class="min-w-full max-w-screen-lg">
+        <%= yield %>
+      </div>
     </main>
   </body>
+
 </html>

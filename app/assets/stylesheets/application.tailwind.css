@@ -5,7 +5,7 @@
 /*
 
 @layer components {
-  .btn-primary {
+  .btn-secondary {
     @apply py-2 px-4 bg-blue-200;
   }
 }

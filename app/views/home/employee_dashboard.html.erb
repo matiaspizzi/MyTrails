@@ -1,0 +1,63 @@
+<script>
+  const funct = () => {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+  }
+
+  const closeModal = () => {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+  }
+</script>
+
+<div class="px-4 py-6">
+  <div class="flex gap-4 items-center">
+    <h1 class="text-3xl font-bold">Mis Objetivos</h1>
+    <button onClick="funct()"><span class="material-icons">add</span></button>
+  </div>
+  <p class="text-gray-600 mb-4">Estos son tus objetivos actuales.</p>
+
+  <ul class="space-y-4">
+    <% @objectives.each do |objective| %>
+      <li class="bg-white p-4 rounded shadow">
+        <h2 class="text-lg font-bold text-gray-800"><%= objective.title %></h2>
+        <p class="text-gray-700"><%= objective.description %></p>
+        <p class="text-sm text-gray-500">
+          Fecha estimada: <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
+        </p>
+        <% if objective.rating.present? %>
+          <p class="text-sm text-green-600 font-semibold">
+            Calificación: <%= objective.rating %> / 5
+          </p>
+        <% else %>
+          <p class="text-sm text-gray-600">Sin calificar</p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<!-- Modal Structure -->
+<div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center min-w-screen min-h-screen" style="display: none;">
+  <div class="bg-white p-6 rounded shadow-lg max-w-[500px] max-h-fit">
+    <button onClick="closeModal()" class="text-gray-600 hover:text-gray-900">&times;</button>
+    <h2 class="text-xl font-bold mb-4">Nuevo Objetivo</h2>
+    <%= form_with(model: Objective.new, url: objectives_path, local: true) do |form| %>
+      <div class="mb-4">
+        <%= form.label :title, "Título" %>
+        <%= form.text_field :title, class: "w-full p-2 border rounded" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :description, "Descripción" %>
+        <%= form.text_area :description, class: "w-full p-2 border rounded" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :estimated_completion_at, "Fecha Estimada" %>
+        <%= form.date_field :estimated_completion_at, class: "w-full p-2 border rounded" %>
+      </div>
+      <div class="flex justify-end">
+        <%= form.submit "Crear", class: "bg-blue-500 text-white px-4 py-2 rounded" %>
+      </div>
+    <% end %>
+  </div>
+</div>

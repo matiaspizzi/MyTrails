@@ -1,0 +1,39 @@
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-3xl font-bold mb-6">Panel de Líder</h1>
+  <p class="text-gray-600 mb-4">Aquí puedes ver y gestionar los objetivos de tus empleados a cargo.</p>
+
+  <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Empleado</th>
+          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Título</th>
+          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Descripción</th>
+          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Fecha Estimada</th>
+          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Calificación</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @objectives.each do |objective| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.employee.email_address %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.title %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= truncate(objective.description, length: 50) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.rating.present? ? "#{objective.rating} / 5" : "Sin calificar" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

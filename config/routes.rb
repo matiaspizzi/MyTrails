@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   get 'confirm_registration', to: 'registrations#confirm'
-  resource :registration, only: [:new,:create]
+  resource :registration, only: [:new, :create]
   resource :session
   resources :passwords, param: :token
+  resources :objectives, only: [:create]
   get "pages/about"
   get "pages/authentification"
   get "pages/account"
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -17,9 +17,10 @@ module.exports = {
         padding: '1rem',
       },
       colors: {
-        'primary': '#212529',
+        'primary': '#121c2b',
         'secondary': '#9fef00',
         'tertiary': '#202837',
+        'quaternary': '#a4b1cd',
       },
     },
   },

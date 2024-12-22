@@ -1,0 +1,99 @@
+<script>
+  function submitForm() {
+    const form = document.getElementById('profile-image-form');
+    form.submit();
+  }
+</script>
+
+<div class="bg-primary shadow-lg min-h-screen px-16 items-center flex flex-col">
+    <div class="flex w-[870px] flex-col gap-4  justify-center">
+    <!-- Datos del Usuario -->
+        <h2 class="text-2xl font-bold mb-6 text-white pt-10">User Settings</h2>
+    
+        <div class="flex flex-col items-center mb-6 w-full gap-12">
+
+            <div class="flex items-center justify-between w-full">
+                <div class="flex gap-4 items-center">
+                    <div class="flex w-32 h-32 rounded-full overflow-hidden border-2 border-secondary">
+                        <%= image_tag(@user.profile_image || 'default_profile.png', alt: 'Imagen de perfil', class: 'w-full h-full object-cover') %>
+                    </div>
+
+                    <div>
+                        <p class="text-lg text-white mt-2"><strong>Upload your profile image</strong></p>
+                        <p class="text-quaternary text-sm">The image must not exceed 1MB</p>
+                    </div>    
+                </div>
+                <div class="flex gap-4 items-center justify-center">
+                    <%= form_with(model: @user, url: update_profile_image_user_path(@user), local: true, html: { enctype: "multipart/form-data", id: "profile-image-form" }) do |form| %>
+                        <div>
+                            <%= form.file_field :profile_image, id: "profile_image", class: "hidden", onchange: "submitForm()" %>
+                            <label for="profile_image" class="cursor-pointer bg-tertiary hover:bg-[#252e3d] text-white py-2 px-4 rounded">
+                                Upload image
+                            </label>
+                        </div>
+                    <% end %>
+
+                    <%= form_with(model: @user, url: delete_profile_image_user_path(@user), method: :delete, local: true) do %>
+                        <div class="flex justify-end">
+                            <%= button_tag type: "submit", class: "bg-red-500 text-white px-3 flex items-center h-[36px] rounded hover:bg-red-600 cursor-pointer" do %>
+                                <span class="material-icons">delete</span>
+                            <% end %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            <hr class="w-full border-tertiary h-[1px]"/>
+            <div class="min-w-full p-4 rounded-sm">
+                <div class="mb-4 flex gap-2 items-center justify-center">
+                    <div class="flex-1">
+                        <label class="block text-quaternary" for="user_name">Name:</label>
+                        <p class="w-full p-2 bg-tertiary rounded text-white"><%= @user.name.capitalize || '-' %></p>
+                    </div>
+
+                    <div class="flex-1">
+                        <label class="block text-quaternary" for="user_surname">Surname:</label>
+                        <p class="w-full p-2 bg-tertiary rounded text-white"><%= @user.surname.capitalize || '-' %></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-quaternary" for="user_email">Email:</label>
+                    <p class="w-full p-2 bg-tertiary rounded text-white"><%= @user.email_address %></p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-quaternary" for="user_role">Role:</label>
+                    <p class="w-full p-2 bg-tertiary rounded text-white"><%= @user.role.capitalize %></p>
+                </div>
+            </div>
+            <hr class="w-full border-tertiary h-[1px]"/>
+            <h3 class="min-w-full text-2xl font-semibold text-white mb-4">Assigned Leaders</h3>
+            <% if @leaders.present? && @leaders.any? %>
+                <ul class="space-y-4">
+                <% @leaders.each do |leader| %>
+                    <li class="p-4 bg-tertiary rounded-lg shadow-md flex items-center gap-4">
+                        <div class="flex w-16 h-16 rounded-full overflow-hidden border-2 border-tertiary">
+                            <%= image_tag(leader.profile_image || 'default_profile.png', alt: 'Imagen de perfil', class: 'w-full h-full object-cover') %>
+                        </div>
+                        <div class="flex flex-col gap-1 justify-center">
+                            <div class="flex gap-2 items-center">
+                                <p class="text-lg text-quaternary">Name:</p>
+                                <p class="text-white"><%= leader.name.capitalize || "No specified" %></p>
+                            </div>
+                            <div class="flex gap-2 items-center">
+                                <p class="text-lg text-quaternary">Email:</p>
+                                <p class="text-white"><%= leader.email_address || "No specified" %></p>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="inline-block bg-secondary text-primary text-sm px-3 py-1 rounded">Líder</span>
+                        </div>
+                    </li>
+                <% end %>
+                </ul>
+            <% else %>
+                <p class="text-quaternary">No tienes líderes asignados.</p>
+            <% end %>
+        </div>
+    </div>  
+</div>

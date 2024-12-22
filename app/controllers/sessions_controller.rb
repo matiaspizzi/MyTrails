@@ -10,6 +10,10 @@ class SessionsController < ApplicationController
   def new
   end
 
+  def show
+    redirect_to new_session_path
+  end
+
   def create
     user = User.find_by(email_address: params[:email_address])
     if user&.authenticate(params[:password])

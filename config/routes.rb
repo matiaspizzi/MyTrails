@@ -4,13 +4,16 @@ Rails.application.routes.draw do
   resource :registration, only: [:new, :create]
   resource :session
   resources :passwords, param: :token
-  resources :objectives, only: [:create]
+  resources :objectives, only: [:index, :show, :create, :update, :destroy]
+
+
   get "pages/about"
   get "pages/authentification"
   get "pages/account"
   
   get 'account', to: 'users#account', as: :account
-  
+  get 'leader_dashboard', to: 'leader#dashboard', as: :leader_dashboard
+
   resources :users do
     member do
       patch :update_profile_image

@@ -1,26 +1,48 @@
-<div class="container mx-auto px-4 py-6">
-  <h1 class="text-3xl font-bold mb-6">Panel de Líder</h1>
-  <p class="text-gray-600 mb-4">Aquí puedes ver y gestionar los objetivos de tus empleados a cargo.</p>
+<div class="bg-primary px-4 py-6 text-quaternary min-h-screen ">
+  <h1 class="text-3xl font-bold mb-6 text-white">Leader Dashboard</h1>
+  <p class="text-quaternary mb-4">Your team's objectives</p>
 
-  <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-    <table class="min-w-full bg-white border border-gray-200">
-      <thead class="bg-gray-50">
+  <div class="mb-4">
+    <%= form_with(url: root_path, method: :get, local: true) do |form| %>
+      <div class="flex items-center gap-2">
+        <%= form.text_field :query, value: params[:query], placeholder: "Search objectives...", class: "p-2 rounded w-full border border-quaternary bg-tertiary" %>
+        <%= form.submit "Search", class: "bg-secondary text-primary px-4 py-2 rounded cursor-pointer hover:opacity-50" %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <div class="overflow-x-scroll">
+    <table class="border border-gray-200 w-full">
+      <thead class="bg-quaternary text-white">
         <tr>
-          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Empleado</th>
-          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Título</th>
-          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Descripción</th>
-          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Fecha Estimada</th>
-          <th class="text-left px-6 py-3 border-b font-medium text-gray-600 uppercase tracking-wider">Calificación</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Employee</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Title</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Status</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Description</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Estimated date</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Rating</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
         <% @objectives.each do |objective| %>
-          <tr>
+          <tr style=" hov">
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= objective.employee.email_address %>
+              <%= objective.employee.name.capitalize %> <%= objective.employee.surname.capitalize %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <%= objective.title %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="rounded-full border px-2 w-fit"
+                style="<%= case objective.status
+                    when 'New' then 'color: white; border: 1px solid white;'
+                    when 'In_Progress' then 'color:#fddf69; border: 1px solid #fddf69;'
+                    when 'In_Review' then 'color: #df69fd; border: 1px solid #df69fd;'
+                    else 'color:  #69fd95; border: 1px solid #69fd95;'
+                  end %> padding-left: 8px; padding-right: 8px;">
+                <%= objective.status.titleize %>
+              </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <%= truncate(objective.description, length: 50) %>
@@ -29,7 +51,7 @@
               <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= objective.rating.present? ? "#{objective.rating} / 5" : "Sin calificar" %>
+              <%= objective.rating.present? ? "#{objective.rating} / 5" : "Not rated yet" %>
             </td>
           </tr>
         <% end %>

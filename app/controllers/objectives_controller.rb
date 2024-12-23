@@ -1,5 +1,14 @@
 # filepath: /c:/Users/matia/Desktop/trails/app/controllers/objectives_controller.rb
 class ObjectivesController < ApplicationController
+  before_action :set_objective, only: [:destroy, :update, :rate, :unrate, :show]
+  
+  def index
+    redirect_to root_path
+  end
+
+  def show
+  end
+
   def create
     @objective = Objective.new(objective_params)
     @objective.employee = current_user if current_user.role == "employee"
@@ -17,20 +26,21 @@ class ObjectivesController < ApplicationController
     end
   end
 
-  def update
-    @objective = Objective.find(params[:id])
-    @objective.update(objective_params)
-    redirect_to root_path
+  def update    
+    if @objective.update(objective_params)
+      redirect_to root_path, notice: 'El estado del objetivo se ha actualizado correctamente.'
+    else
+      redirect_to root_path, alert: 'No se pudo actualizar el estado del objetivo.'
+    end
   end
 
   def destroy
-    @objective = Objective.find(params[:id])
     @objective.destroy
-    redirect_to root_path
+    flash[:notice] = "Objective deleted successfully."
+    redirect_to objectives_path
   end
 
   def rate
-    @objective = Objective.find(params[:id])
     @objective.rating = params[:rating]
     @objective.rated_by = current_user
     @objective.save
@@ -38,7 +48,6 @@ class ObjectivesController < ApplicationController
   end
 
   def unrate
-    @objective = Objective.find(params[:id])
     @objective.rating = nil
     @objective.rated_by = nil
     @objective.save
@@ -47,7 +56,11 @@ class ObjectivesController < ApplicationController
 
   private
 
+  def set_objective
+    @objective = Objective.find(params[:id])
+  end
+
   def objective_params
-    params.require(:objective).permit(:title, :description, :estimated_completion_at)
+    params.require(:objective).permit(:title, :description, :estimated_completion_at, :status)
   end
 end

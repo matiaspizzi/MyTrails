@@ -62,10 +62,5 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Ensure rubocop script is executable
-        run: |
-          chmod +x bin/rubocop
-          ls -l bin/rubocop # Verificar permisos
-
       - name: Run RuboCop for linting
-        run: bin/rubocop -f github
+        run: bundle exec rubocop -f github

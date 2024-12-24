@@ -54,5 +54,5 @@ jobs:
         run: chmod +x bin/rubocop
 
       - name: Run RuboCop for linting
-        run: bin/rubocop -f github
+        run: bundle exec rubocop -f github
 

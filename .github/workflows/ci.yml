@@ -50,6 +50,9 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Lint code for consistent style
+      - name: Ensure rubocop script is executable
+        run: chmod +x bin/rubocop
+
+      - name: Run RuboCop for linting
         run: bin/rubocop -f github
 

@@ -1,14 +1,12 @@
 <script>
   function redirectToObjective(objectiveId) {
-      // Redirige al path del objetivo usando el ID
-    console.log('Redirecting to objective:', objectiveId);
     window.location.href = "objective/" + objectiveId;
   }
 </script>
 
 <div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
-  <h1 class="text-3xl font-bold mb-6 text-white">Leader Dashboard</h1>
-  <p class="mb-4">Your team's objectives</p>
+  <h1 class="text-3xl font-bold mb-6 text-white">Admin Dashboard</h1>
+  <p class="mb-4">Your employees' objectives</p>
 
   <div class="mb-4">
     <%= form_with(url: leader_dashboard_path, method: :get, local: true) do |form| %>
@@ -66,5 +64,39 @@
         <% end %>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div id="objectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
+  <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
+    <div id="modal-loader" class="absolute inset-0 flex items-center justify-center bg-primary bg-opacity-80" style="display: none;">
+      <div class="loader"></div>
+    </div>
+
+    <div id="modal-content" style="display: none;">
+      <div class="flex justify-between items-center mb-4 w-full">
+        <h2 id="modal-title" class="text-xl font-bold text-secondary">Objective Title</h2>
+        <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
+      </div>
+
+      <p id="modal-description" class="mb-4">Objective Description</p>
+      <p id="modal-status" class="mb-2">Status: </p>
+      
+      <p id="modal-estimated-date" class="mb-2">Estimated Completion: </p>
+      <p id="modal-rating" class="mb-2">Rating: </p>
+      <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>
+        <input type="hidden" name="id" id="objective-id">
+        <div class="flex align-center gap-2">
+          <p class="text-secondary font-bold leading-4">Change Rating</p>
+          <select name="rating" id="rating" class="py-1 px-2 border border-secondary rounded max-w-fit">
+            <option value="">Select</option>
+            <% (1..5).each do |rating| %>
+              <option value="<%= rating %>"><%= rating %> / 5</option>
+            <% end %>
+          </select>
+          <button type="submit" class="bg-secondary text-primary px-2 py-1 rounded hover:opacity-75">Save</button>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

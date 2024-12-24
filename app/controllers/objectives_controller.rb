@@ -1,22 +1,21 @@
 # filepath: /c:/Users/matia/Desktop/trails/app/controllers/objectives_controller.rb
 class ObjectivesController < ApplicationController
-  before_action :set_objective, only: [:destroy, :update, :rate, :unrate, :show]
+  before_action :set_objective, only: [:destroy, :update, :rate, :unrate, :details]
   
   def index
     redirect_to root_path
   end
 
-  def show
-    objective = Objective.find(params[:id])
-    objective.employee = current_user if current_user.role == "employee"
-    render json: {
-      id: objective.id,
-      title: objective.title,
-      description: objective.description,
-      status: objective.status.titleize,
-      estimated_date: objective.estimated_completion_at.strftime('%d/%m/%Y'),
-      rating: objective.rating.present? ? "#{objective.rating} / 5" : "Not rated yet"
-    }
+  def details
+    if @objective == nil
+      redirect_to leader_dashboard_path, alert: 'We could not find the objective you are looking for.'
+    end
+
+    if (current_user.role == "employee" || !current_user.employees.include?(@objective.employee)) && current_user.role != "admin"
+        redirect_to root_path, alert: "You don't have permission to access this page."
+        return
+    end
+    render "objectives/details"
   end
 
   def create
@@ -56,14 +55,13 @@ class ObjectivesController < ApplicationController
   end
 
   def rate
-    @objective = Objective.find(params[:id]) # Asegúrate de que `id` esté disponible
     if @objective.update(rating: params[:rating], status: 3, rated_by: current_user.id)
       flash[:success] = "Rating updated successfully!"
     else
       flash[:error] = "Failed to update rating."
     end
 
-    redirect_to leader_dashboard_path
+    redirect_back(fallback_location: objectives_path)
   end
 
   def unrate
@@ -80,10 +78,10 @@ class ObjectivesController < ApplicationController
   end
 
   def set_objective
-    @objective = Objective.find(params[:id])
+    @objective = Objective.includes(:employee, :rater).find(params[:id])
   end
 
   def objective_params
-    params.require(:objective).permit(:title, :description, :estimated_completion_at, :status)
+    params.require(:objective).permit(:title, :description, :estimated_completion_at, :status, :id)
   end
 end

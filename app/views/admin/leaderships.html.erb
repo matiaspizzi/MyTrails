@@ -1,0 +1,88 @@
+<script>
+  const newObjetctiveModal = () => {
+    const modal = document.getElementById('newObjectiveModal');
+    modal.style.display = 'flex';
+  }
+
+  const closeModal = () => {
+    const modal = document.getElementById('newObjectiveModal');
+    modal.style.display = 'none';
+  }
+</script>
+
+<div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
+  <div class="flex gap-4 items-center align-middle mb-4">
+    <h1 class="text-3xl font-bold text-white">Leaderships</h1>
+    <% if @leaderships.empty? %>
+      <button onClick="newObjetctiveModal()" class="flex items-center justify-center rounded-full bg-secondary hover:bg-[#8ed600]">
+        <span class="material-icons text-primary">add</span>
+      </button>
+      <span class="material-icons text-secondary animate-marquee">arrow_back</span>
+    <% else %>
+      <button onClick="newObjetctiveModal()" class="flex items-center justify-center"><span class="material-icons text-secondary">add</span></button>
+    <% end %>
+  </div>
+
+  <% if @leaderships_grouped_by_leader.present? %>
+    <% @leaderships_grouped_by_leader.each do |leader, leaderships| %>
+      <div class="bg-tertiary p-4 rounded-lg shadow-md w-[500px] mb-6">
+        <p class="text-quaternary text-xs mb-2">Leader</p>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-secondary">
+            <%= image_tag(leader.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+          </div>
+          <div>
+            <h1 class="text-lg text-secondary font-bold"><%= leader.name.titleize %> <%= leader.surname.titleize %></h1>
+            <p class="text-quaternary text-sm"><%= leader.email_address %></p>
+          </div>
+        </div>
+        <p class="text-quaternary text-xs ml-8 mb-2">Employees assigned</p>
+        <% leaderships.each do |leadership| %>
+          <div class="flex items-center gap-4 mb-2 ml-8 justify-between">
+            <div class="flex items-center gap-4">
+              <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400">
+                <%= image_tag(leadership.employee.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+              </div>
+
+              <div>
+                <h1 class="text-base text-blue-400 font-bold"><%= leadership.employee.name.titleize %> <%= leadership.employee.surname.titleize %></h1>
+                <p class="text-quaternary text-sm"><%= leadership.employee.email_address %></p>
+              </div>
+            </div>
+            <%= form_with(model: leadership, url: leadership_path(leadership.id), method: :delete, local: true) do |form| %>
+                <div class="flex justify-end">
+                  <%= button_tag type: "submit", class: "text-red-500 cursor-pointer" do %>
+                    <span class="material-icons">delete</span>
+                  <% end %>
+                </div>
+              <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-white">No leaderships found</p>
+  <% end %>
+</div>
+
+<div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
+  <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
+    <div class="flex justify-between items-center mb-4 w-full">
+      <h2 class="text-xl font-bold text-secondary">New Leasership</h2>
+      <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
+    </div>
+    <%= form_with(model: Leadership.new, url: leadership_create_path, local: true) do |form| %>
+      <div class="mb-4">
+        <p>Leader Email Address</p>
+        <%= form.email_field :leader_email, class: "w-full p-2 rounded bg-tertiary", required: true %>
+      </div>
+      <div class="mb-4">
+        <p>Employee Email Address</p>
+        <%= form.email_field :employee_email, class: "w-full p-2 rounded bg-tertiary", required: true %>
+      </div>
+      <div class="flex justify-end">
+        <%= form.submit "Save", class: "bg-blue-500 text-white px-4 py-2 rounded bg-tertiary cursor-pointer hover:bg-opacity-50" %>
+      </div>
+    <% end %>
+  </div>
+</div>

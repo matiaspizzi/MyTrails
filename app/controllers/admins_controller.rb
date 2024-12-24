@@ -1,12 +1,11 @@
-class LeaderController < ApplicationController
+class AdminsController < ApplicationController
   def dashboard
-    if current_user.role != "leader"
+    if current_user.role != "admin"
       redirect_to root_path, alert: "You don't have permission to access this page."
     end
     if params[:query].present?
         @objectives = Objective.joins("INNER JOIN users ON users.id = objectives.employee_id")
-                               .where(employee_id: current_user.employees.pluck(:id))
-                               .where(
+                                .where(
                                  "objectives.title ILIKE :query 
                                   OR objectives.description ILIKE :query 
                                   OR users.name ILIKE :query 
@@ -18,20 +17,19 @@ class LeaderController < ApplicationController
     else
       # objectives with status In Review, first 
       @objectives = Objective.includes(:employee)
-      .where(employee_id: current_user.employees.pluck(:id))
       .order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
     end
-    render "leader/dashboard"
+    render "admin/dashboard"
   end
 
   def objective
     @objective = Objective.includes(:employee, :rater).find(params[:id])
     if @objective == nil
       redirect_to leader_dashboard_path, alert: 'We could not find the objective you are looking for.'
-    elsif current_user.role != "leader" || !current_user.employees.include?(@objective.employee)
+    elsif current_user.role != "admin"
       redirect_to leader_dashboard_path, alert: "You don't have permission to access this page."
       return
     end
-    render "leader/objective"
+    render "admin/objective"
   end
 end

@@ -4,16 +4,25 @@ Rails.application.routes.draw do
   resource :registration, only: [:new, :create]
   resource :session, only: [:new, :create, :destroy]
   resources :passwords, param: :token
-  resources :objectives, only: [:index, :show, :create, :update, :destroy]
+  resources :objectives, only: [:create, :update, :destroy]
 
-  post '/objectives/rate', to: 'objectives#rate', as: 'rate_objective'
+  post 'objective/rate', to: 'objectives#rate', as: :rate_objective
 
-  get "pages/about"
-  get "pages/account"
+  get 'objective/:id', to: 'objectives#details', as: :objective_details
+
+  get 'pages/account'
   
   get 'account', to: 'users#account', as: :account
-  get 'leader_dashboard', to: 'leader#dashboard', as: :leader_dashboard
-  get 'leader/objective/:id', to: 'leader#objective', as: :leader_objective
+
+  get 'leader_dashboard', to: 'leaders#dashboard', as: :leader_dashboard
+
+  get 'admin_dashboard', to: 'admins#dashboard', as: :admin_dashboard
+
+  get 'leadership', to: 'leaderships#show', as: :leadership
+
+  post 'leadership', to: 'leaderships#create', as: :leadership_create
+
+  delete 'leadership.:id', to: 'leaderships#destroy', as: :leadership_destroy
 
   resources :users do
     member do

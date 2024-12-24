@@ -1,3 +1,21 @@
+<style>
+  @keyframes marquee {
+    0% {
+      transform: translateX(30%);
+    }
+    50% {
+      transform: translateX(-30%);
+    }
+    100% {
+      transform: translateX(30%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 1s linear infinite;
+  }
+</style>
+
 <script>
   const newObjetctiveModal = () => {
     const modal = document.getElementById('newObjectiveModal');
@@ -13,20 +31,30 @@
 <div class="px-4 py-6 bg-primary min-h-screen">
   <div class="flex gap-4 items-center align-middle">
     <h1 class="text-3xl font-bold text-white">My Objectives</h1>
-    <button onClick="newObjetctiveModal()" class="flex items-center justify-center"><span class="material-icons text-secondary">add</span></button>
+    <% if @objectives.empty? %>
+      <button onClick="newObjetctiveModal()" class="flex items-center justify-center rounded-full bg-secondary hover:bg-[#8ed600]">
+        <span class="material-icons text-primary">add</span>
+      </button>
+      <span class="material-icons text-secondary animate-marquee">arrow_back</span>
+    <% else %>
+      <button onClick="newObjetctiveModal()" class="flex items-center justify-center"><span class="material-icons text-secondary">add</span></button>
+    <% end %>
   </div>
   <p class="text-gray-600 mb-4">These are your current objectives</p>
 
   <div class="space-y-4">
+    <% if @objectives.empty? %>
+      <p class="text-gray-500">You don't have any objectives yet</p>
+    <% end %>
     <% @objectives.each do |objective| %>
-      <div class="bg-tertiary p-4 rounded shadow max-w-[700px]">
+      <div class="bg-tertiary p-4 rounded shadow">
         <div class="flex justify-between items-center align-middle">
           <div class="flex items-center gap-4">
             <h2 class="font-bold text-xl text-white">
               <%= objective.title %>
             </h2>
 
-            <div class="rounded-full border px-2"
+            <div class="rounded-full border px-2 text-xs"
               style="<%= case objective.status
                   when 'New' then 'color: white; border: 1px solid white;'
                   when 'In_Progress' then 'color:#fddf69; border: 1px solid #fddf69;'
@@ -36,14 +64,14 @@
               <%= objective.status.titleize %>
             </div>
           </div>
-          
+
           <div class="flex gap-4 items-center align-middle">
             <%= form_with(model: objective, local: true) do |form| %>
               <div>
                 <%= form.select :status, 
                                 Objective.statuses.map { |key, _value| [key.titleize, key] },
                                 { include_blank: false }, 
-                                class: "w-full rounded-sm bg-tertiary text-quaternary h-fit text-sm p-[0px]",
+                                class: "w-full rounded-sm bg-tertiary text-quaternary gap-1 h-fit text-sm pr-3 py-1",
                                 onchange: 'this.form.submit()' %>
               </div>
             <% end %>
@@ -58,9 +86,19 @@
           </div>
         </div>
         <p class="text-gray-500 p-4"><%= objective.description %></p>
-        <p class="text-sm text-gray-500">
-          Estimated date <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
-        </p>
+        <div class="flex gap-1">
+          <p class="text-sm text-gray-500">
+            Estimated date <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
+          </p>
+          <% if (objective.estimated_completion_at - 3.days) < Time.now %>
+            <span class="material-icons text-red-500 text-md">priority_high</span>
+            <p class="text-red-500 text-sm leading-2"> <%= ((objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</p>
+          <% end %>
+          <% if (objective.estimated_completion_at - 7.days) < Time.now && (objective.estimated_completion_at - 3.days) > Time.now %>
+            <span class="material-icons text-yellow-400 text-md">priority_high</span>
+            <p class="text-yellow-400 text-sm leading-2"> <%= ((objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</p>
+          <% end %>
+        </div>
         <% if objective.rating.present? %>
           <div class="flex items-center gap-2">
             <p class="text-sm text-secondary font-semibold">
@@ -83,23 +121,23 @@
   </div>
 </div>
 
-<div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen" style="display: none;">
+<div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary" style="display: none;">
   <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
     <div class="flex justify-between items-center mb-4 w-full">
       <h2 class="text-xl font-bold text-secondary">New Objective</h2>
       <button onClick="closeModal()" class="text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
     </div>
     <%= form_with(model: Objective.new, url: objectives_path, local: true) do |form| %>
-      <div class="mb-4 text-tertiary">
+      <div class="mb-4">
         <p>Title</p>
         <%= form.text_field :title, class: "w-full p-2 rounded bg-tertiary", required: true %>
       </div>
-      <div class="mb-4 text-tertiary">
-        <p class="text-tertiary">Description</p>
+      <div class="mb-4">
+        <p>Description</p>
         <%= form.text_area :description, class: "w-full p-2 rounded bg-tertiary", required: true %>
       </div>
-      <div class="mb-4 text-tertiary">
-        <p class="text-tertiary">Estimated date</p>
+      <div class="mb-4">
+        <p>Estimated date</p>
         <%= form.date_field :estimated_completion_at, class: "w-full p-2 rounded bg-tertiary", required: true %>
       </div>
       <div class="flex justify-end">

@@ -1,32 +1,47 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+<div class="w-full h-screen bg-primary text-quaternary flex flex-col items-center ">
+
+  <%= link_to root_path, class: "flex justify-center items-center mt-8 gap-3 justify-self-start" do %>
+    <%= image_tag("icon.svg", alt: "Trails logo", class: "w-10 h-10 object-cover") %>
+    <h2 class="text-xl font-bold text-white tracking-widest"> TRAILS </h2>
   <% end %>
+  
+  <div class="w-[480px] rounded-md bg-[#182232] p-8 mt-8 h-fit">
+    <%= form_with url: session_url, class: "contents" do |form| %>
+      <div class="flex flex-col gap-6">
+        <h1 class="font-semibold text-2xl text-white">Sign in to Trails</h1>
+        
+        <div>
+          <label class="text-sm">Email</label>
+          <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address],
+          class: "block shadow rounded-md border border-secondary bg-tertiary outline-none px-3 py-2 mt-2 w-full" %>
+        </div>
 
-  <% if notice = flash[:notice] %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-  <% end %>
+        <div>
+          <label class="text-sm">Password</label>
+          <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, 
+          class: "block shadow rounded-md border border-secondary bg-tertiary outline-none px-3 py-2 mt-2 w-full" %>
+        </div>
 
-  <h1 class="font-bold text-4xl">Sign in</h1>
+        <% if alert = flash[:alert] %>
+          <p class="text-red-500 text-sm font-medium" id="alert"><%= alert %></p>
+        <% end %>
+        
+        <div class="col-span-6 flex items-center gap-4">
+          <div class="inline">
+            <%= form.submit "Sign in", class: "rounded-lg py-2 px-3 bg-secondary text-tertiary inline-block font-medium cursor-pointer hover:bg-[#8ed600]" %>
+          </div>
 
-  <%= form_with url: session_url, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="my-5">
-      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-    </div>
-
-    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-      <div class="inline">
-        <%= form.submit "Sign in", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+          <div class="text-sm text-quaternary ">
+            <%= link_to "Forgot password?", new_password_path, class: "hover:underline" %>
+          </div>
+        </div>
+        <hr class="border-quaternary" />
+        <div class="text-sm text-secondary flex gap-1">
+          <p class="text-quaternary"> New to Trails?</p>
+          <%= link_to "Create Account", new_registration_path, class: "text-secondary font-bold hover:underline" %>
+          <span class="material-icons text-sm">arrow_forward</span>
+        </div>
       </div>
-
-      <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-          <%= link_to "Register", new_registration_path %> <br>
-        <%= link_to "Forgot password?", new_password_path, class: "text-gray-700 underline" %>
-      </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   get 'confirm_registration', to: 'registrations#confirm'
   resource :registration, only: [:new, :create]
-  resource :session
+  resource :session, only: [:new, :create, :destroy]
   resources :passwords, param: :token
   resources :objectives, only: [:index, :show, :create, :update, :destroy]
 

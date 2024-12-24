@@ -3,8 +3,11 @@
 </script>
 
 <ul class="fixed top-0 left-0 w-full h-[60px] text-sm font-semibold text-white flex items-center px-4 bg-primary z-50 border-b border-tertiary">
-  <li class="border border-secondary rounded-sm hover:shadow-lg hover:text-primary transition-shadow duration-200">
-    <%= link_to 'Home', root_path, class: "block px-4 py-1 text-center hover:bg-secondary" %>
+  <li>
+    <%= link_to root_path, class: "block px-1 py-1 rounded-full hover:bg-secondary text-white hover:text-primary flex gap-1 items-center" do %>
+      <%= image_tag("icon.svg", alt: "Trails logo", class: "w-10 h-10 object-cover") %>
+      <p class="text-xl font-bold tracking-widest"> TRAILS </p>
+    <% end %>
   </li>
 
   <% if current_user %>
@@ -42,7 +45,7 @@
             <%= link_to "Settings", account_path%>
           </li>
           <li class="px-3 py-2 hover:bg-secondary hover:text-primary">
-            <%= link_to "Sign Out", session_path, method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
+            <%= link_to "Sign Out", new_session_path, method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
           </li>
         </ul>
       </li>

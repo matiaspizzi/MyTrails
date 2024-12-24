@@ -8,7 +8,6 @@ on:
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,12 +18,14 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Install dependencies
+        run: bundle install
+
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+        run: bundle exec brakeman --no-pager
 
   scan_js:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,6 +35,14 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Ensure importmap script is executable
+        run: |
+          chmod +x bin/importmap
+          ls -l bin/importmap  # Verifica permisos
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -50,9 +59,13 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Install dependencies
+        run: bundle install
+
       - name: Ensure rubocop script is executable
-        run: chmod +x bin/rubocop
+        run: |
+          chmod +x bin/rubocop
+          ls -l bin/rubocop # Verificar permisos
 
       - name: Run RuboCop for linting
-        run: bundle exec rubocop -f github
-
+        run: bin/rubocop -f github

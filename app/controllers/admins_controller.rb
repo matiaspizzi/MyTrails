@@ -17,7 +17,7 @@ class AdminsController < ApplicationController
     else
       # objectives with status In Review, first 
       @objectives = Objective.includes(:employee)
-      .order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
+      .order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"),:status, :created_at)
     end
     render "admin/dashboard"
   end
@@ -25,9 +25,9 @@ class AdminsController < ApplicationController
   def objective
     @objective = Objective.includes(:employee, :rater).find(params[:id])
     if @objective == nil
-      redirect_to leader_dashboard_path, alert: 'We could not find the objective you are looking for.'
+      redirect_to admin_dashboard_path, alert: 'We could not find the objective you are looking for.'
     elsif current_user.role != "admin"
-      redirect_to leader_dashboard_path, alert: "You don't have permission to access this page."
+      redirect_to admin_dashboard_path, alert: "You don't have permission to access this page."
       return
     end
     render "admin/objective"

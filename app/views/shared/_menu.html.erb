@@ -19,6 +19,12 @@
         </li>
       <% end %>
 
+      <% if current_user.role == "admin" && Rails.application.routes.url_helpers.respond_to?(:leadership_path) %>
+        <li class="border border-secondary rounded-sm hover:shadow-lg hover:text-primary transition-shadow duration-200">
+          <%= link_to "Leaderships", leadership_path, class: "block px-4 py-1 text-center hover:bg-secondary" %>
+        </li>
+      <% end %>
+
       <% if current_user.role == "admin" && Rails.application.routes.url_helpers.respond_to?(:admin_dashboard_path) %>
         <li class="border border-secondary rounded-sm hover:shadow-lg hover:text-primary transition-shadow duration-200">
           <%= link_to "Admin Dashboard", admin_dashboard_path, class: "block px-4 py-1 text-center hover:bg-secondary" %>
@@ -40,10 +46,10 @@
               Settings
             </li>
           <% end %>
-          <%= link_to new_session_path, method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } do %>
-            <li class="px-3 py-1 hover:bg-secondary hover:text-primary">
+          <%= form_with url: destroy_session_path, method: :delete, data: { confirm: "Are you sure?" } do %>
+            <button type="submit" class="px-3 py-1 hover:bg-secondary flex items-start hover:text-primary w-full">
               Sign Out
-            </li>
+            </button>
           <% end %>
         </ul>
       </li>

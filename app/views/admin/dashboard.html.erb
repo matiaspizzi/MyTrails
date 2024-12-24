@@ -9,7 +9,7 @@
   <p class="mb-4">Your employees' objectives</p>
 
   <div class="mb-4">
-    <%= form_with(url: leader_dashboard_path, method: :get, local: true) do |form| %>
+    <%= form_with(url: admin_dashboard_path, method: :get, local: true) do |form| %>
       <div class="flex items-center gap-2">
         <%= form.text_field :query, value: params[:query], placeholder: "Search objectives...", class: "p-2 rounded w-full border border-quaternary bg-tertiary" %>
         <%= form.submit "Search", class: "bg-secondary text-primary px-4 py-2 rounded cursor-pointer hover:opacity-50" %>

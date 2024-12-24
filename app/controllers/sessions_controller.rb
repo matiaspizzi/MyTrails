@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    terminate_session
     user = User.find_by(email_address: params[:email_address])
     if user&.authenticate(params[:password])
       start_new_session_for(user)

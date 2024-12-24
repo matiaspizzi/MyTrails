@@ -11,6 +11,11 @@ class LeadershipsController < ApplicationController
   end
 
   def create
+    if leadership_params[:leader_email] == leadership_params[:employee_email]
+      redirect_to leadership_path, alert: "Leader and employee cannot be the same."
+      return
+    end
+
     @leader = User.find_by(email_address: leadership_params[:leader_email])
     @employee = User.find_by(email_address: leadership_params[:employee_email])
 

@@ -8,6 +8,7 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      start_new_session_for(@user)
       @user.send_confirmation_instructions
       redirect_to root_url, notice: "Please check your email to confirm your account."
     else

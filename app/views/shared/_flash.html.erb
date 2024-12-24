@@ -1,13 +1,12 @@
   <% flash.each do |type, message| %>
-    <%# Map flash types to corresponding Tailwind CSS classes %>
-    <% flash_class = case type
+  <%# Map flash types to corresponding Tailwind CSS classes %>
+  <% flash_class = case type
          when "notice" then "text-secondary border-secondary"
          when "alert" then "text-red-400 border-red-400"
          else "text-gray-400 border-gray-400"
        end %>
-  
-    <div class="bg-tertiary border-r-4 p-4 mb-4 fixed top-[70px] right-2 flex align-middle justify-between <%= flash_class %>">
-      <p><%= message %></p>
-      <button class="px-4" onclick="this.parentElement.style.display='none'">x</button>
-    </div>
-  <% end %>
+  <div class="bg-tertiary border-r-4 p-4 mb-4 fixed top-[70px] right-2 flex align-middle justify-between <%= flash_class %>">
+    <p><%= message %></p>
+    <button class="px-4" onclick="this.parentElement.style.display='none'">x</button>
+  </div>
+<% end %>

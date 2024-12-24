@@ -51,7 +51,7 @@ group :development, :test do
   gem "rubocop-rails", "~> 2.0", require: false
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-  gem "htmlbeautifier"
+
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 

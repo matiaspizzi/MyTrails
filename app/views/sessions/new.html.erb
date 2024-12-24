@@ -1,36 +1,29 @@
 <div class="w-full h-screen bg-primary text-quaternary flex flex-col items-center ">
-
   <%= link_to root_path, class: "flex justify-center items-center mt-8 gap-3 justify-self-start" do %>
     <%= image_tag("icon.svg", alt: "Trails logo", class: "w-10 h-10 object-cover") %>
     <h2 class="text-xl font-bold text-white tracking-widest"> TRAILS </h2>
   <% end %>
-  
   <div class="w-[480px] rounded-md bg-[#182232] p-8 mt-8 h-fit">
     <%= form_with url: new_session_url, class: "contents" do |form| %>
       <div class="flex flex-col gap-6">
         <h1 class="font-semibold text-2xl text-white">Sign in to Trails</h1>
-        
         <div>
           <label class="text-sm">Email</label>
           <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address],
           class: "block shadow rounded-md border border-secondary bg-tertiary outline-none px-3 py-2 mt-2 w-full" %>
         </div>
-
         <div>
           <label class="text-sm">Password</label>
           <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, 
           class: "block shadow rounded-md border border-secondary bg-tertiary outline-none px-3 py-2 mt-2 w-full" %>
         </div>
-
         <% if alert = flash[:alert] %>
           <p class="text-red-500 text-sm font-medium" id="alert"><%= alert %></p>
         <% end %>
-        
         <div class="col-span-6 flex items-center gap-4">
           <div class="inline">
             <%= form.submit "Sign in", class: "rounded-lg py-2 px-3 bg-secondary text-tertiary inline-block font-medium cursor-pointer hover:bg-[#8ed600]" %>
           </div>
-
           <div class="text-sm text-quaternary ">
             <%= link_to "Forgot password?", new_password_path, class: "hover:underline" %>
           </div>

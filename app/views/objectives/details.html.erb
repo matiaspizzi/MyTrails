@@ -13,7 +13,6 @@
           <p class="text-quaternary text-sm"><%= @objective.employee.name.titleize %> <%= @objective.employee.surname.titleize %></p>
         </div>
       </div>
-
       <div class="rounded-full border px-2 w-fit"
                 style="<%= case @objective.status
                     when 'New' then 'color: white; border: 1px solid white;'
@@ -24,7 +23,6 @@
         <%= @objective.status.titleize %>
       </div>
     </div>
-
     <p class="text-quaternary p-4"><%= @objective.description %></p>
     <div class="flex gap-1 items-center">
       <span class="text-quaternary text-sm">Estimated date <%= @objective.estimated_completion_at.strftime('%d/%m/%Y') %></span>
@@ -59,20 +57,18 @@
             <p class="text-quaternary text-sm">Without rating</p>
           </div>
         <% end %>
-
-
         <div class="flex items-center gap-2 text-sm">
           <p class="font-bold leading-4">Change Rating</p>
           <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>
-              <div>
-                <input type="hidden" name="id" id="objective-id" value="<%= @objective.id %>">
-                <%= form.select :rating, 
+            <div>
+              <input type="hidden" name="id" id="objective-id" value="<%= @objective.id %>">
+              <%= form.select :rating, 
                                 (1..5).map { |rating| [rating, rating] },
                                 { include_blank: true }, 
                                 class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
                                 onchange: 'this.form.submit()' %>
-              </div>
-            <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>

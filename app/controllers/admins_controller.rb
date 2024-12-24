@@ -16,8 +16,7 @@ class AdminsController < ApplicationController
                                ).order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
     else
       # objectives with status In Review, first
-      @objectives = Objective.includes(:employee)
-      .order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
+      @objectives = Objective.includes(:employee).order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
     end
     render "admin/dashboard"
   end

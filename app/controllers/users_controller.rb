@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def set_user_role
     @user = User.find(params[:id])
-    @user.update(role: params[:role])
+    @user.update(role: params[:user][:role])
     redirect_to users_roles_path
   end
 
@@ -63,6 +63,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:profile_image)
+    params.require(:user).permit(:profile_image, :role, :name, :surname)
   end
 end

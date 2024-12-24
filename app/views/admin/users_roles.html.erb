@@ -4,7 +4,9 @@
   </div>
   <div class="flex flex-wrap w-full gap-4">
     <%= render partial: 'user_role_section', locals: { users: @admins, role_name: 'Admins' } %>
-    <%= render partial: 'user_role_section', locals: { users: @leaders, role_name: 'Leaders' } %>
-    <%= render partial: 'user_role_section', locals: { users: @employees, role_name: 'Employees' } %>
+    <div class="w-full flex justify-center gap-4">
+      <%= render partial: 'user_role_section', locals: { users: @leaders, role_name: 'Leaders' } %>
+      <%= render partial: 'user_role_section', locals: { users: @employees, role_name: 'Employees' } %>
+    </div>
   </div>
 </div>

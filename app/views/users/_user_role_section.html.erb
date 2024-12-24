@@ -15,14 +15,16 @@
           <p class="text-quaternary text-sm"><%= user.email_address %></p>
         </div>
       </div>
-      <%= form_with(model: user, local: true) do |form| %>
-        <div>
-          <%= form.select :role, 
-              ['admin', 'leader', 'employee'].map { |key, _value| [key.titleize, key] },
-              { include_blank: false }, 
-              class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
-              onchange: 'this.form.submit()' %>
-        </div>
+      <% if user.role != 'admin' %>
+        <%= form_with(model: user, url: set_user_role_path(user), method: :patch, local: true) do |form| %>
+          <div>
+            <%= form.select :role, 
+                ['leader', 'employee'].map { |key| [key.titleize, key] },
+                { include_blank: false }, 
+                class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
+                onchange: 'this.form.submit()' %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   <% end %>

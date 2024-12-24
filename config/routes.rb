@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   get 'users_roles', to: 'users#show_all', as: :users_roles
 
-  post 'users_roles.:id', to: 'users#set_user_role', as: :set_user_role
+  patch 'users_roles.:id', to: 'users#set_user_role', as: :set_user_role
 
   get 'leadership', to: 'leaderships#show', as: :leadership
   post 'leadership', to: 'leaderships#create', as: :leadership_create

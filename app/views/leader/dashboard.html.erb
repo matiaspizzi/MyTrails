@@ -1,0 +1,144 @@
+<script>
+  const objectiveModal = async (row) => {
+    const modal = document.getElementById('objectiveModal');
+    const loader = document.getElementById('modal-loader');
+    const content = document.getElementById('modal-content');
+    const objectiveId = row.dataset.id;
+
+    modal.style.display = 'flex';
+    loader.style.display = 'flex';
+    content.style.display = 'none';
+
+    try {
+
+      const response = await fetch(`/objectives/${objectiveId}`);
+      const objectiveData = await response.json();
+
+      document.getElementById('modal-title').innerText = objectiveData.title;
+      document.getElementById('modal-description').innerText = objectiveData.description;
+      document.getElementById('modal-status').innerHTML = `Status: <span class="rounded-full border px-2 w-fit" style="${objectiveData.status_style}">${objectiveData.status}</span>`;
+      document.getElementById('modal-estimated-date').innerText = `Estimated Completion: ${objectiveData.estimated_date}`;
+      document.getElementById('modal-rating').innerText = `Rating: ${objectiveData.rating || 'Not rated yet'}`;
+
+      document.getElementById('objective-id').value = objectiveId;
+
+      loader.style.display = 'none';
+      content.style.display = 'block';
+    } catch (error) {
+      console.error('Error fetching objective data:', error);
+      loader.style.display = 'none';
+      content.style.display = 'block';
+    }
+
+
+
+  };
+
+  function redirectToObjective(objectiveId) {
+      // Redirige al path del objetivo usando el ID
+    console.log('Redirecting to objective:', objectiveId);
+    window.location.href = "leader/objective/" + objectiveId;
+  }
+
+  const closeModal = () => {
+    const modal = document.getElementById('objectiveModal');
+    modal.style.display = 'none';
+  };
+</script>
+
+<div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
+  <h1 class="text-3xl font-bold mb-6 text-white">Leader Dashboard</h1>
+  <p class="mb-4">Your team's objectives</p>
+
+  <div class="mb-4">
+    <%= form_with(url: leader_dashboard_path, method: :get, local: true) do |form| %>
+      <div class="flex items-center gap-2">
+        <%= form.text_field :query, value: params[:query], placeholder: "Search objectives...", class: "p-2 rounded w-full border border-quaternary bg-tertiary" %>
+        <%= form.submit "Search", class: "bg-secondary text-primary px-4 py-2 rounded cursor-pointer hover:opacity-50" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <table class="border border-quaternary w-full">
+      <thead class="bg-tertiary text-secondary">
+        <tr>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Employee</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Title</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Status</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Description</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Estimated date</th>
+          <th class="text-left px-6 py-3 border-b font-bold uppercase tracking-wider">Rating</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <% @objectives.each do |objective| %>
+          <tr class="hover:bg-tertiary hover:text-quaternary transition-colors duration-200 cursor-pointer" 
+              data-id="<%= objective.id %>" 
+              onClick="redirectToObjective(<%= objective.id %>)">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.employee.name.capitalize %> <%= objective.employee.surname.capitalize %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.title %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="rounded-full border px-2 w-fit"
+                style="<%= case objective.status
+                    when 'New' then 'color: white; border: 1px solid white;'
+                    when 'In_Progress' then 'color:#fddf69; border: 1px solid #fddf69;'
+                    when 'In_Review' then 'color: #df69fd; border: 1px solid #df69fd;'
+                    else 'color:  #69fd95; border: 1px solid #69fd95;'
+                  end %> padding-left: 8px; padding-right: 8px;">
+              <%= objective.status.titleize %>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= truncate(objective.description, length: 50) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= objective.rating.present? ? "#{objective.rating} / 5" : "Not rated yet" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="objectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
+  <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
+    <div id="modal-loader" class="absolute inset-0 flex items-center justify-center bg-primary bg-opacity-80" style="display: none;">
+      <div class="loader"></div>
+    </div>
+
+    <div id="modal-content" style="display: none;">
+      <div class="flex justify-between items-center mb-4 w-full">
+        <h2 id="modal-title" class="text-xl font-bold text-secondary">Objective Title</h2>
+        <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
+      </div>
+
+      <p id="modal-description" class="mb-4">Objective Description</p>
+      <p id="modal-status" class="mb-2">Status: </p>
+      
+      <p id="modal-estimated-date" class="mb-2">Estimated Completion: </p>
+      <p id="modal-rating" class="mb-2">Rating: </p>
+      <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>
+        <input type="hidden" name="id" id="objective-id">
+        <div class="flex align-center gap-2">
+          <p class="text-secondary font-bold leading-4">Change Rating</p>
+          <select name="rating" id="rating" class="py-1 px-2 border border-secondary rounded max-w-fit">
+            <option value="">Select</option>
+            <% (1..5).each do |rating| %>
+              <option value="<%= rating %>"><%= rating %> / 5</option>
+            <% end %>
+          </select>
+          <button type="submit" class="bg-secondary text-primary px-2 py-1 rounded hover:opacity-75">Save</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

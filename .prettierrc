@@ -1,4 +1,5 @@
 {
+  "plugins": ["@prettier/plugin-ruby", "prettier-plugin-erb"],
   "semi": true,
   "singleQuote": true,
   "trailingComma": "es5",

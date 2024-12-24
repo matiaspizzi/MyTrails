@@ -3,11 +3,9 @@
     window.location.href = "objective/" + objectiveId;
   }
 </script>
-
 <div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
   <h1 class="text-3xl font-bold mb-6 text-white">Admin Dashboard</h1>
   <p class="mb-4">Your employees' objectives</p>
-
   <div class="mb-4">
     <%= form_with(url: admin_dashboard_path, method: :get, local: true) do |form| %>
       <div class="flex items-center gap-2">
@@ -16,7 +14,6 @@
       </div>
     <% end %>
   </div>
-
   <div>
     <table class="border border-quaternary w-full">
       <thead class="bg-tertiary text-secondary">
@@ -48,7 +45,7 @@
                     when 'In_Review' then 'color: #df69fd; border: 1px solid #df69fd;'
                     else 'color:  #69fd95; border: 1px solid #69fd95;'
                   end %> padding-left: 8px; padding-right: 8px;">
-              <%= objective.status.titleize %>
+                <%= objective.status.titleize %>
               </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
@@ -66,22 +63,18 @@
     </table>
   </div>
 </div>
-
 <div id="objectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
   <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
     <div id="modal-loader" class="absolute inset-0 flex items-center justify-center bg-primary bg-opacity-80" style="display: none;">
       <div class="loader"></div>
     </div>
-
     <div id="modal-content" style="display: none;">
       <div class="flex justify-between items-center mb-4 w-full">
         <h2 id="modal-title" class="text-xl font-bold text-secondary">Objective Title</h2>
         <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
       </div>
-
       <p id="modal-description" class="mb-4">Objective Description</p>
       <p id="modal-status" class="mb-2">Status: </p>
-      
       <p id="modal-estimated-date" class="mb-2">Estimated Completion: </p>
       <p id="modal-rating" class="mb-2">Rating: </p>
       <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>

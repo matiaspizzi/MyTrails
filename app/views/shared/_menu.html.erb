@@ -27,14 +27,18 @@
 
       <% if Rails.application.routes.url_helpers.respond_to?(:account_path) %>
       <li class="relative border border-secondary rounded-sm hover:shadow-lg">
-        <span class="block px-3 py-1 text-center text-white hover:text-primary hover:bg-secondary cursor-pointer">My account</span>
-        <ul class="absolute left-0 w-fit bg-primary text-white border border-secondary rounded-sm shadow-lg hidden group-hover:block">
-          <li class="px-3 py-2 hover:bg-secondary hover:text-primary">
-            <%= link_to "Settings", account_path%>
-          </li>
-          <li class="px-3 py-2 hover:bg-secondary hover:text-primary">
-            <%= link_to "Sign Out", new_session_path, method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } %>
-          </li>
+        <span class="block px-3 py-1 text-center text-white hover:text-primary hover:bg-secondary"><%= current_user.email_address %></span>
+        <ul class="absolute w-full left-0 bg-primary text-white border border-secondary hidden group-hover:block">
+          <%= link_to account_path do %>
+            <li class="px-3 py-1 hover:bg-secondary hover:text-primary">
+              Settings
+            </li>
+          <% end %>
+          <%= link_to new_session_path, method: :delete, data: { turbo_method: :delete, confirm: "Are you sure?" } do %>
+            <li class="px-3 py-1 hover:bg-secondary hover:text-primary">
+              Sign Out
+            </li>
+          <% end %>
         </ul>
       </li>
     <% end %>

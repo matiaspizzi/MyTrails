@@ -15,9 +15,15 @@ class UsersController < ApplicationController
 
   def set_user_role
     @user = User.find(params[:id])
-    @user.update(role: params[:user][:role])
-    redirect_to users_roles_path
+    if current_user.admin?
+      @user.update(role: params[:user][:role])
+      redirect_to users_roles_path
+    else
+      flash[:alert] = "You are not authorized to change roles."
+      redirect_to account_path
+    end
   end
+
 
   def update_profile_image
     @user = current_user
@@ -63,6 +69,10 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:profile_image, :role, :name, :surname)
+    if current_user.admin? || @user == current_user
+      params.require(:user).permit(:profile_image, :role, :name, :surname)
+    else
+      params.require(:user).permit(:profile_image, :name, :surname)
+    end
   end
 end

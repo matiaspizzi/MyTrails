@@ -1,20 +1,4 @@
-<style>
-  @keyframes marquee {
-    0% {
-      transform: translateX(30%);
-    }
-    50% {
-      transform: translateX(-30%);
-    }
-    100% {
-      transform: translateX(30%);
-    }
-  }
 
-  .animate-marquee {
-    animation: marquee 1s linear infinite;
-  }
-</style>
 
 <script>
   const newObjetctiveModal = () => {
@@ -65,40 +49,47 @@
             </div>
           </div>
 
-          <div class="flex gap-4 items-center align-middle">
-            <%= form_with(model: objective, local: true) do |form| %>
-              <div>
-                <%= form.select :status, 
-                                Objective.statuses.map { |key, _value| [key.titleize, key] },
-                                { include_blank: false }, 
-                                class: "w-full rounded-sm bg-tertiary text-quaternary gap-1 h-fit text-sm pr-3 py-1",
-                                onchange: 'this.form.submit()' %>
-              </div>
-            <% end %>
+          <% if !objective.rating.present? %>
+            <div class="flex gap-4 items-center align-middle">
+              <%= form_with(model: objective, local: true) do |form| %>
+                <div>
+                  <%= form.select :status, 
+                                  Objective.statuses.map { |key, _value| [key.titleize, key] },
+                                  { include_blank: false }, 
+                                  class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
+                                  onchange: 'this.form.submit()' %>
+                </div>
+              <% end %>
 
-            <%= form_with(model: objective, url: objective_path(objective), method: :delete, local: true) do |form| %>
-              <div class="flex justify-end">
-                <%= button_tag type: "submit", class: "text-red-500 cursor-pointer" do %>
-                  <span class="material-icons">delete</span>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
+              <%= form_with(model: objective, url: objective_path(objective), method: :delete, local: true) do |form| %>
+                <div class="flex justify-end">
+                  <%= button_tag type: "submit", class: "text-red-500 cursor-pointer" do %>
+                    <span class="material-icons">delete</span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
+
         <p class="text-gray-500 p-4"><%= objective.description %></p>
+
         <div class="flex gap-1">
           <p class="text-sm text-gray-500">
             Estimated date <%= objective.estimated_completion_at.strftime('%d/%m/%Y') %>
           </p>
+
           <% if (objective.estimated_completion_at - 3.days) < Time.now %>
             <span class="material-icons text-red-500 text-md">priority_high</span>
             <p class="text-red-500 text-sm leading-2"> <%= ((objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</p>
           <% end %>
+
           <% if (objective.estimated_completion_at - 7.days) < Time.now && (objective.estimated_completion_at - 3.days) > Time.now %>
             <span class="material-icons text-yellow-400 text-md">priority_high</span>
             <p class="text-yellow-400 text-sm leading-2"> <%= ((objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</p>
           <% end %>
         </div>
+
         <% if objective.rating.present? %>
           <div class="flex items-center gap-2">
             <p class="text-sm text-secondary font-semibold">
@@ -121,11 +112,11 @@
   </div>
 </div>
 
-<div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary" style="display: none;">
+<div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
   <div class="bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]" style="width: 700px;">
     <div class="flex justify-between items-center mb-4 w-full">
       <h2 class="text-xl font-bold text-secondary">New Objective</h2>
-      <button onClick="closeModal()" class="text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+      <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
     </div>
     <%= form_with(model: Objective.new, url: objectives_path, local: true) do |form| %>
       <div class="mb-4">

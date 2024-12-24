@@ -24,10 +24,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-primary text-quaternary">
     <main class="flex flex-col mt-[60px] items-center min-h-screen min-w-screen">
       <%= render 'shared/flash' %>
-      <%= render 'shared/menu' %>
+      <% unless current_page?(new_session_path) || current_page?(new_registration_path) %>
+        <%= render 'shared/menu' %>
+      <% end %>
       <div class="min-w-full max-w-screen-lg">
         <%= yield %>
       </div>

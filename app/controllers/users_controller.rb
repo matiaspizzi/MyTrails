@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   def account
     @user = current_user
     @leaders = @user.leaders || []
+    @employees = @user.employees || []
   end
 
   def update_profile_image

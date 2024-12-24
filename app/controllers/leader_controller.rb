@@ -28,9 +28,9 @@ class LeaderController < ApplicationController
     @objective = Objective.includes(:employee, :rater).find(params[:id])
     if @objective == nil
       redirect_to leader_dashboard_path, alert: 'We could not find the objective you are looking for.'
-    end
-    if current_user.role != "leader" || !current_user.employees.include?(@objective.employee)
+    elsif current_user.role != "leader" || !current_user.employees.include?(@objective.employee)
       redirect_to leader_dashboard_path, alert: "You don't have permission to access this page."
+      return
     end
     render "leader/objective"
   end

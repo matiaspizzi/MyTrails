@@ -1,0 +1,10 @@
+<div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
+  <div class="flex gap-4 items-center align-middle mb-4">
+    <h1 class="text-3xl font-bold text-white">Assign Roles</h1>
+  </div>
+  <div class="flex flex-wrap w-full gap-4">
+    <%= render partial: 'user_role_section', locals: { users: @admins, role_name: 'Admins' } %>
+    <%= render partial: 'user_role_section', locals: { users: @leaders, role_name: 'Leaders' } %>
+    <%= render partial: 'user_role_section', locals: { users: @employees, role_name: 'Employees' } %>
+  </div>
+</div>

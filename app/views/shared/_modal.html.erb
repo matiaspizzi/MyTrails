@@ -1,0 +1,9 @@
+<div id="<%= id %>" class="modal fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">
+  <div class="content bg-primary text-quaternary p-6 rounded shadow-lg max-h-fit w-[700px]">
+    <div class="flex justify-between items-center mb-4 w-full">
+      <h2 class="text-xl font-bold text-secondary"><%= title %></h2>
+      <button data-action="close-modal" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
+    </div>
+    <%= yield %>
+  </div>
+</div>

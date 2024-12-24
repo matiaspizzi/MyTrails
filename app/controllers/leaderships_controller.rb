@@ -1,5 +1,4 @@
 class LeadershipsController < ApplicationController
-
   def show
     @leaderships = Leadership.includes(:leader, :employee).all
     @leaderships_grouped_by_leader = @leaderships.group_by(&:leader)
@@ -7,7 +6,7 @@ class LeadershipsController < ApplicationController
         redirect_to root_path, alert: "You don't have permission to access this page."
         return
     end
-    render 'admin/leaderships'
+    render "admin/leaderships"
   end
 
   def create
@@ -20,7 +19,7 @@ class LeadershipsController < ApplicationController
     @employee = User.find_by(email_address: leadership_params[:employee_email])
 
     if @leader == nil || @employee == nil
-      redirect_to leadership_path, alert: ( @leader == nil ? "Leader not found." : "Employee not found." )
+      redirect_to leadership_path, alert: (@leader == nil ? "Leader not found." : "Employee not found.")
       return
     elsif @leader.role != "leader"
       redirect_to leadership_path, alert: @leader.name.titleize + " is not a leader."
@@ -28,11 +27,10 @@ class LeadershipsController < ApplicationController
     end
     @leadership = Leadership.new(leader: @leader, employee: @employee)
     if @leadership.save
-      redirect_to leadership_path, notice: 'Leadership was successfully created.'
+      redirect_to leadership_path, notice: "Leadership was successfully created."
     else
-      redirect_to leadership_path, alert: 'Failed to create leadership.'
+      redirect_to leadership_path, alert: "Failed to create leadership."
     end
-
   end
 
   def destroy
@@ -42,7 +40,7 @@ class LeadershipsController < ApplicationController
     end
     @leadership = Leadership.find(params[:id])
     @leadership.destroy
-    redirect_to leadership_path, notice: 'Leadership was successfully removed.'
+    redirect_to leadership_path, notice: "Leadership was successfully removed."
   end
 
   private

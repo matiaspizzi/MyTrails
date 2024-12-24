@@ -33,7 +33,7 @@ class User < ApplicationRecord
 
     # Decodificar Base64 para calcular el tamaño
     size_in_bytes = Base64.decode64(profile_image).bytesize
-    max_size_in_bytes = 1.megabytes
+    max_size_in_bytes = 1.megabyte
 
     if size_in_bytes > max_size_in_bytes
       errors.add(:profile_image, "The image is too large. The maximum size is 1MB.")

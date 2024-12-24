@@ -7,7 +7,7 @@ class CreateLeaderships < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_index :leaderships, [:leader_id, :employee_id], unique: true
+    add_index :leaderships, [ :leader_id, :employee_id ], unique: true
     add_foreign_key :leaderships, :users, column: :leader_id
     add_foreign_key :leaderships, :users, column: :employee_id
   end

@@ -1,0 +1,29 @@
+<div class="bg-tertiary p-4 rounded-lg shadow-md w-full mb-6 h-fit">
+  <div class="flex items-center gap-4 mb-4">
+    <div>
+      <h1 class="text-lg text-secondary font-bold"><%= role_name %></h1>
+    </div>
+  </div>
+  <% users.each do |user| %>
+    <div class="flex items-center gap-4 mb-2 ml-8 justify-between">
+      <div class="flex items-center gap-4">
+        <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400">
+          <%= image_tag(user.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+        </div>
+        <div>
+          <h1 class="text-base text-blue-400 font-bold"><%= user.name.titleize %> <%= user.surname.titleize %></h1>
+          <p class="text-quaternary text-sm"><%= user.email_address %></p>
+        </div>
+      </div>
+      <%= form_with(model: user, local: true) do |form| %>
+        <div>
+          <%= form.select :role, 
+              ['admin', 'leader', 'employee'].map { |key, _value| [key.titleize, key] },
+              { include_blank: false }, 
+              class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
+              onchange: 'this.form.submit()' %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

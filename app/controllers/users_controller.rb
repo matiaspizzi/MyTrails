@@ -1,9 +1,22 @@
 class UsersController < ApplicationController
-
   def account
     @user = current_user
     @leaders = @user.leaders || []
     @employees = @user.employees || []
+  end
+
+  def show_all
+    @users_group_by_role = User.all.order(:name).group_by(&:role)
+    @admins = @users_group_by_role["admin"] || []
+    @employees = @users_group_by_role["employee"] || []
+    @leaders = @users_group_by_role["leader"] || []
+    render "admin/users_roles"
+  end
+
+  def set_user_role
+    @user = User.find(params[:id])
+    @user.update(role: params[:role])
+    redirect_to users_roles_path
   end
 
   def update_profile_image
@@ -13,7 +26,7 @@ class UsersController < ApplicationController
       file = params[:user][:profile_image]
 
       size_in_bytes = file.size
-      max_size_in_bytes = 1.megabytes
+      max_size_in_bytes = 1.megabyte
 
       if size_in_bytes > max_size_in_bytes
         flash[:alert] = "The image is too large. The maximum size is 1MB."

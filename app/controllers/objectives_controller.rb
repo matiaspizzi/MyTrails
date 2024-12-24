@@ -1,14 +1,14 @@
 # filepath: /c:/Users/matia/Desktop/trails/app/controllers/objectives_controller.rb
 class ObjectivesController < ApplicationController
-  before_action :set_objective, only: [:destroy, :update, :rate, :unrate, :details]
-  
+  before_action :set_objective, only: [ :destroy, :update, :rate, :unrate, :details ]
+
   def index
     redirect_to root_path
   end
 
   def details
     if @objective == nil
-      redirect_to leader_dashboard_path, alert: 'We could not find the objective you are looking for.'
+      redirect_to leader_dashboard_path, alert: "We could not find the objective you are looking for."
     end
 
     if (current_user.role == "employee" || !current_user.employees.include?(@objective.employee)) && current_user.role != "admin"
@@ -21,25 +21,25 @@ class ObjectivesController < ApplicationController
   def create
     @objective = Objective.new(objective_params)
     @objective.employee = current_user
-    
+
     if @objective.save
       respond_to do |format|
-        format.html { redirect_to root_path, notice: 'Objective was successfully created.' }
+        format.html { redirect_to root_path, notice: "Objective was successfully created." }
         format.turbo_stream
       end
     else
       respond_to do |format|
-        format.html { redirect_to root_path, alert: 'Failed to create objective.' }
+        format.html { redirect_to root_path, alert: "Failed to create objective." }
         format.turbo_stream { render :new }
       end
     end
   end
 
-  def update    
+  def update
     if @objective.update(objective_params)
-      redirect_to root_path, notice: 'El estado del objetivo se ha actualizado correctamente.'
+      redirect_to root_path, notice: "El estado del objetivo se ha actualizado correctamente."
     else
-      redirect_to root_path, alert: 'No se pudo actualizar el estado del objetivo.'
+      redirect_to root_path, alert: "No se pudo actualizar el estado del objetivo."
     end
   end
 

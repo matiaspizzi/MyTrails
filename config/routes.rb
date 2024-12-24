@@ -25,6 +25,10 @@ Rails.application.routes.draw do
   
   get 'admin_dashboard', to: 'admins#dashboard', as: :admin_dashboard
 
+  get 'users_roles', to: 'users#show_all', as: :users_roles
+
+  post 'users_roles.:id', to: 'users#set_user_role', as: :set_user_role
+
   get 'leadership', to: 'leaderships#show', as: :leadership
   post 'leadership', to: 'leaderships#create', as: :leadership_create
   delete 'leadership.:id', to: 'leaderships#destroy', as: :leadership_destroy

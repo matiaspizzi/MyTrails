@@ -24,40 +24,7 @@
   <div class="flex flex-wrap w-full gap-4">
     <% if @leaderships_grouped_by_leader.present? %>
       <% @leaderships_grouped_by_leader.each do |leader, leaderships| %>
-        <div class="bg-tertiary p-4 rounded-lg shadow-md w-[400px] mb-6 h-fit">
-          <p class="text-quaternary text-xs mb-2">Leader</p>
-          <div class="flex items-center gap-4 mb-4">
-            <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-secondary">
-              <%= image_tag(leader.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
-            </div>
-            <div>
-              <h1 class="text-lg text-secondary font-bold"><%= leader.name.titleize %> <%= leader.surname.titleize %></h1>
-              <p class="text-quaternary text-sm"><%= leader.email_address %></p>
-            </div>
-          </div>
-          <p class="text-quaternary text-xs ml-8 mb-2">Employees assigned</p>
-          <% leaderships.each do |leadership| %>
-            <div class="flex items-center gap-4 mb-2 ml-8 justify-between">
-              <div class="flex items-center gap-4">
-                <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400">
-                  <%= image_tag(leadership.employee.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
-                </div>
-
-                <div>
-                  <h1 class="text-base text-blue-400 font-bold"><%= leadership.employee.name.titleize %> <%= leadership.employee.surname.titleize %></h1>
-                  <p class="text-quaternary text-sm"><%= leadership.employee.email_address %></p>
-                </div>
-              </div>
-              <%= form_with(model: leadership, url: leadership_path(leadership.id), method: :delete, local: true) do |form| %>
-                  <div class="flex justify-end">
-                    <%= button_tag type: "submit", class: "text-red-500 cursor-pointer" do %>
-                      <span class="material-icons">delete</span>
-                    <% end %>
-                  </div>
-                <% end %>
-            </div>
-          <% end %>
-        </div>
+        <%= render partial: 'admin/leadership', locals: { leader: leader, leaderships: leaderships } %>
       <% end %>
     <% else %>
       <p class="text-white">No leaderships found</p>

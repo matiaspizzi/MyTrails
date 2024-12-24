@@ -131,6 +131,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    htmlbeautifier (1.4.3)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -398,6 +399,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.0)
   guard (~> 2.0)
   guard-rspec (~> 4.7)
+  htmlbeautifier
   importmap-rails
   jbuilder
   kamal

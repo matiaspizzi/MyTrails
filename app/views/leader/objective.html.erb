@@ -1,0 +1,72 @@
+<div class="w-full h-full items-center justify-center flex">
+  <div class="max-w-[800px] w-full flex flex-col gap-4 p-8 bg-tertiary rounded-lg mt-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl text-secondary font-bold"><%= @objective.title.titleize %></h1>
+        <p class="text-quaternary text-sm"><%= @objective.employee.name.titleize %> <%= @objective.employee.surname.titleize %></p>
+      </div>
+
+      <div class="rounded-full border px-2 w-fit"
+                style="<%= case @objective.status
+                    when 'New' then 'color: white; border: 1px solid white;'
+                    when 'In_Progress' then 'color:#fddf69; border: 1px solid #fddf69;'
+                    when 'In_Review' then 'color: #df69fd; border: 1px solid #df69fd;'
+                    else 'color:  #69fd95; border: 1px solid #69fd95;'
+                  end %> padding-left: 8px; padding-right: 8px;">
+        <%= @objective.status.titleize %>
+      </div>
+    </div>
+
+    <p class="text-quaternary p-4"><%= @objective.description %></p>
+    <div class="flex gap-1 items-center">
+      <span class="text-quaternary text-sm">Estimated date <%= @objective.estimated_completion_at.strftime('%d/%m/%Y') %></span>
+      <% if (@objective.estimated_completion_at - 3.days) < Time.now %>
+        <span class="material-icons text-red-500 text-md">priority_high</span>
+        <span class="text-red-500 text-sm leading-2"> <%= ((@objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</span>
+      <% end %>
+      <% if (@objective.estimated_completion_at - 7.days) < Time.now && (@objective.estimated_completion_at - 3.days) > Time.now %>
+        <span class="material-icons text-yellow-400 text-md">priority_high</span>
+        <span class="text-yellow-400 text-sm leading-2"> <%= ((@objective.estimated_completion_at - Time.now) / 1.day).to_i %> days left</span>
+      <% end %>
+    </div>
+    <hr class="border-quaternary my-4"/>
+    <% if @objective.status != 'In_Review' && @objective.status != 'Done' %>
+      <p class="text-sm text-quaternary"> <strong class="text-sm text-secundary">•</strong> Once the employee has set the status to 'In Review', you can rate the objective. </p>
+    <% else %>
+      <div class="flex items-center justify-between">
+        <% if @objective.rating.present? %>
+          <div class="flex items-center gap-2">
+            <p class="text-sm text-secondary font-semibold">
+              <%= @objective.rating %> / 5 
+            </p>
+            <span class="material-icons text-secondary text-sm">star</span>
+            <p class="text-quaternary text-sm">Rated by:</p>
+            <p class="text-sm text-secondary font-semibold">
+              <%= @objective.rater.name.capitalize %> <%= @objective.rater.surname.capitalize %>
+            </p>
+          </div>
+        <% else %>
+          <div class="flex items-center gap-2">
+            <span class="material-icons text-quaternary text-sm">star</span>
+            <p class="text-quaternary text-sm">Without rating</p>
+          </div>
+        <% end %>
+
+
+        <div class="flex items-center gap-2 text-sm">
+          <p class="font-bold leading-4">Change Rating</p>
+          <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>
+              <div>
+                <input type="hidden" name="id" id="objective-id" value="<%= @objective.id %>">
+                <%= form.select :rating, 
+                                (1..5).map { |rating| [rating, rating] },
+                                { include_blank: true }, 
+                                class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
+                                onchange: 'this.form.submit()' %>
+              </div>
+            <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

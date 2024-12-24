@@ -7,11 +7,21 @@ class ObjectivesController < ApplicationController
   end
 
   def show
+    objective = Objective.find(params[:id])
+    objective.employee = current_user if current_user.role == "employee"
+    render json: {
+      id: objective.id,
+      title: objective.title,
+      description: objective.description,
+      status: objective.status.titleize,
+      estimated_date: objective.estimated_completion_at.strftime('%d/%m/%Y'),
+      rating: objective.rating.present? ? "#{objective.rating} / 5" : "Not rated yet"
+    }
   end
 
   def create
     @objective = Objective.new(objective_params)
-    @objective.employee = current_user if current_user.role == "employee"
+    @objective.employee = current_user
     
     if @objective.save
       respond_to do |format|
@@ -35,16 +45,25 @@ class ObjectivesController < ApplicationController
   end
 
   def destroy
+    if @objective.status == "Done"
+      flash[:alert] = "You can't delete a completed objective."
+      redirect_to objectives_path
+      return
+    end
     @objective.destroy
     flash[:notice] = "Objective deleted successfully."
     redirect_to objectives_path
   end
 
   def rate
-    @objective.rating = params[:rating]
-    @objective.rated_by = current_user
-    @objective.save
-    redirect_to root_path
+    @objective = Objective.find(params[:id]) # Asegúrate de que `id` esté disponible
+    if @objective.update(rating: params[:rating], status: 3, rated_by: current_user.id)
+      flash[:success] = "Rating updated successfully!"
+    else
+      flash[:error] = "Failed to update rating."
+    end
+
+    redirect_to leader_dashboard_path
   end
 
   def unrate
@@ -55,6 +74,10 @@ class ObjectivesController < ApplicationController
   end
 
   private
+
+  def is_rated?
+    @objective.rating.present?
+  end
 
   def set_objective
     @objective = Objective.find(params[:id])

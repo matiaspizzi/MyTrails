@@ -3,13 +3,14 @@ class User < ApplicationRecord
   has_secure_token :confirmation_token
   has_many :sessions, dependent: :destroy
 
-  has_many :objectives, foreign_key: :employee_id, class_name: "Objective"
+  # Associations with inverse_of and dependent options
+  has_many :objectives, foreign_key: :employee_id, class_name: "Objective", inverse_of: :employee
 
-  has_many :leaderships, foreign_key: :leader_id, class_name: "Leadership"
-  has_many :employees, through: :leaderships, source: :employee
+  has_many :leaderships, foreign_key: :leader_id, class_name: "Leadership", inverse_of: :leader, dependent: :destroy
+  has_many :employees, through: :leaderships, source: :employee, inverse_of: :leaders
 
-  has_many :inverse_leaderships, foreign_key: :employee_id, class_name: "Leadership"
-  has_many :leaders, through: :inverse_leaderships, source: :leader
+  has_many :inverse_leaderships, foreign_key: :employee_id, class_name: "Leadership", inverse_of: :employee, dependent: :destroy
+  has_many :leaders, through: :inverse_leaderships, source: :leader, inverse_of: :employees
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -31,7 +32,7 @@ class User < ApplicationRecord
   def validate_profile_image_size
     return if profile_image.blank?
 
-    # Decodificar Base64 para calcular el tamaño
+    # Decode Base64 to calculate the size
     size_in_bytes = Base64.decode64(profile_image).bytesize
     max_size_in_bytes = 1.megabyte
 

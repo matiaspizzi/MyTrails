@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def set_user_role
     @user = User.find(params[:id])
-    if current_user.admin?
+    if current_user.role == "admin"
       @user.update(role: params[:user][:role])
       redirect_to users_roles_path
     else

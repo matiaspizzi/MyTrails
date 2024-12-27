@@ -7,6 +7,7 @@ class CreateObjectives < ActiveRecord::Migration[6.0]
       t.datetime :estimated_completion_at, null: false
       t.integer :rating
       t.bigint :rated_by # ID del líder que calificó el objetivo
+      t.string :status, default: 'New' # Agregar la columna status con valor por defecto
 
       t.timestamps
     end

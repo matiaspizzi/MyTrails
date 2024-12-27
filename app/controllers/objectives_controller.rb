@@ -46,12 +46,12 @@ class ObjectivesController < ApplicationController
   def destroy
     if @objective.status == "Done"
       flash[:alert] = "You can't delete a completed objective."
-      redirect_to objectives_path
+      redirect_to root_path
       return
     end
     @objective.destroy
     flash[:notice] = "Objective deleted successfully."
-    redirect_to objectives_path
+    redirect_to root_path
   end
 
   def rate
@@ -61,7 +61,7 @@ class ObjectivesController < ApplicationController
       flash[:error] = "Failed to update rating."
     end
 
-    redirect_back(fallback_location: objectives_path)
+    redirect_back(fallback_location: root_path)
   end
 
   def unrate

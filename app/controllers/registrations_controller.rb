@@ -9,21 +9,10 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       start_new_session_for(@user)
-      @user.send_confirmation_instructions
-      redirect_to root_url, notice: "Please check your email to confirm your account."
+      redirect_to root_url
     else
-      render :new
-    end
-  end
-
-  def confirm
-    @user = User.find_by(confirmation_token: params[:token])
-
-    if @user
-      @user.confirm!
-      redirect_to root_path, notice: "Your account has been confirmed. Welcome!"
-    else
-      redirect_to root_path, alert: "Invalid confirmation token."
+      flash.now[:alert] = @user.errors.full_messages.join(", ")
+      render :new, status: :unprocessable_entity
     end
   end
 

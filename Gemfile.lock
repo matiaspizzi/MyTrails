@@ -84,7 +84,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    brakeman (6.2.2)
+    brakeman (7.0.0)
       racc
     builder (3.3.0)
     childprocess (5.1.0)
@@ -110,6 +110,7 @@ GEM
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
     ffi (1.17.0-x64-mingw-ucrt)
+    ffi (1.17.0-x86_64-linux-gnu)
     ffi (1.17.0-x86_64-linux-musl)
     formatador (1.1.0)
     fugit (1.11.1)
@@ -202,6 +203,8 @@ GEM
     net-ssh (7.3.0)
     nio4r (2.7.4)
     nokogiri (1.18.0-x64-mingw-ucrt)
+      racc (~> 1.4)
+    nokogiri (1.18.0-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.0-x86_64-linux-musl)
       racc (~> 1.4)
@@ -388,6 +391,7 @@ GEM
 
 PLATFORMS
   x64-mingw-ucrt
+  x86_64-linux
   x86_64-linux-musl
 
 DEPENDENCIES

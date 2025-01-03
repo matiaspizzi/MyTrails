@@ -45,7 +45,7 @@ gem "thruster", require: false
 group :development, :test do
   gem "rspec-rails", "~> 7.0"
   gem "factory_bot_rails", "~> 6.0"
-  gem "guard", "~> 2.0"
+  gem "guard", "~> 2.19"
   gem "guard-rspec", "~> 4.7"
   gem "rubocop", "~> 1.0", require: false
   gem "rubocop-rails", "~> 2.0", require: false

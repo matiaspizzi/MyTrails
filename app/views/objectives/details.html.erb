@@ -6,7 +6,7 @@
           <span class="material-icons w-fit">arrow_back</span>
         <% end %>
         <div class="flex w-16 h-16 rounded-full overflow-hidden border-2 border-secondary">
-          <%= image_tag(@objective.employee.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+          <%= image_tag(@objective.employee.profile_image.attached? ? @objective.employee.profile_image : 'default_profile.png', class: 'w-full h-full object-cover') %>
         </div>
         <div>
           <h1 class="text-2xl text-secondary font-bold"><%= @objective.title.titleize %></h1>

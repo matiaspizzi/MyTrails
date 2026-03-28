@@ -1,6 +1,8 @@
 # filepath: /c:/Users/matia/Desktop/trails/app/controllers/objectives_controller.rb
 class ObjectivesController < ApplicationController
   before_action :set_objective, only: [ :destroy, :update, :rate, :unrate, :details ]
+  before_action :require_ownership, only: [ :update, :destroy ]
+  before_action :require_rater_role, only: [ :rate, :unrate ]
 
   def index
     redirect_to root_path
@@ -73,8 +75,16 @@ class ObjectivesController < ApplicationController
 
   private
 
-  def is_rated?
-    @objective.rating.present?
+  def require_ownership
+    unless @objective.employee == current_user
+      redirect_to root_path, alert: "You don't have permission to modify this objective."
+    end
+  end
+
+  def require_rater_role
+    unless current_user.role == "leader" || current_user.role == "admin"
+      redirect_to root_path, alert: "You don't have permission to rate objectives."
+    end
   end
 
   def set_objective

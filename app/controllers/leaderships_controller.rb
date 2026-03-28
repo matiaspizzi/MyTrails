@@ -22,7 +22,7 @@ class LeadershipsController < ApplicationController
     elsif @employee.nil?
       redirect_to leadership_path, alert: "Employee not found."
       return
-    elsif @leader.role != "leader"
+    elsif !@leader.leader?
       redirect_to leadership_path, alert: "#{@leader.name.titleize} is not a leader."
       return
     end

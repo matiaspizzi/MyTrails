@@ -58,7 +58,7 @@
           <p class="w-full p-2 bg-tertiary rounded text-white"><%= @user.role.capitalize %></p>
         </div>
       </div>
-      <% if current_user.role == 'leader' %>
+      <% if current_user.leader? %>
         <hr class="w-full  border-tertiary h-[1px]"/>
         <div class="min-w-full p-4 rounded-sm flex flex-col align-middle">
           <h3 class="min-w-full text-2xl font-semibold text-white mb-4 self-start">Assigned Employees</h3>

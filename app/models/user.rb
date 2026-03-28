@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :inverse_leaderships, foreign_key: :employee_id, class_name: "Leadership", inverse_of: :employee, dependent: :destroy
   has_many :leaders, through: :inverse_leaderships, source: :leader, inverse_of: :employees
 
+  enum :role, { employee: 0, leader: 1, admin: 2 }, default: :employee
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :profile_image_size

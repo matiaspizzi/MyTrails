@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
   private
 
   def handle_not_authorized
-    redirect_to root_path, alert: "You don't have permission to access this page."
+    redirect_to root_path, alert: t("errors.unauthorized")
   end
 end

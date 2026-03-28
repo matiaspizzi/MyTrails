@@ -26,14 +26,14 @@ class UsersController < ApplicationController
     authorize @user, :update_profile_image?, policy_class: UserPolicy
 
     unless params[:user][:profile_image].present?
-      flash[:alert] = "No image selected."
+      flash[:alert] = t("users.profile_image.no_image")
       render :account and return
     end
 
     @user.profile_image.attach(params[:user][:profile_image])
 
     if @user.valid?
-      redirect_to account_path, notice: "Profile image updated successfully."
+      redirect_to account_path, notice: t("users.profile_image.updated")
     else
       flash[:alert] = @user.errors[:profile_image].first
       render :account
@@ -44,6 +44,6 @@ class UsersController < ApplicationController
     @user = current_user
     authorize @user, :delete_profile_image?, policy_class: UserPolicy
     @user.profile_image.purge
-    redirect_to account_path, notice: "Profile image deleted successfully."
+    redirect_to account_path, notice: t("users.profile_image.deleted")
   end
 end

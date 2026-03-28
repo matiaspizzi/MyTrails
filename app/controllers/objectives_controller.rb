@@ -1,28 +1,19 @@
-# filepath: /c:/Users/matia/Desktop/trails/app/controllers/objectives_controller.rb
 class ObjectivesController < ApplicationController
   before_action :set_objective, only: [ :destroy, :update, :rate, :unrate, :details ]
-  before_action :require_ownership, only: [ :update, :destroy ]
-  before_action :require_rater_role, only: [ :rate, :unrate ]
 
   def index
     redirect_to root_path
   end
 
   def details
-    if @objective == nil
-      redirect_to leader_dashboard_path, alert: "We could not find the objective you are looking for."
-    end
-
-    if (current_user.role == "employee" || !current_user.employees.include?(@objective.employee)) && current_user.role != "admin"
-        redirect_to root_path, alert: "You don't have permission to access this page."
-        return
-    end
+    authorize @objective
     render "objectives/details"
   end
 
   def create
     @objective = Objective.new(objective_params)
     @objective.employee = current_user
+    authorize @objective
 
     if @objective.save
       respond_to do |format|
@@ -38,54 +29,46 @@ class ObjectivesController < ApplicationController
   end
 
   def update
+    authorize @objective
     if @objective.update(objective_params)
-      redirect_to root_path, notice: "El estado del objetivo se ha actualizado correctamente."
+      redirect_to root_path, notice: "Objective status updated successfully."
     else
-      redirect_to root_path, alert: "No se pudo actualizar el estado del objetivo."
+      redirect_to root_path, alert: "Failed to update objective status."
     end
   end
 
   def destroy
+    authorize @objective
     if @objective.status == "Done"
-      flash[:alert] = "You can't delete a completed objective."
-      redirect_to root_path
+      redirect_to root_path, alert: "You can't delete a completed objective."
       return
     end
     @objective.destroy
-    flash[:notice] = "Objective deleted successfully."
-    redirect_to root_path
+    redirect_to root_path, notice: "Objective deleted successfully."
   end
 
   def rate
-    if @objective.update(rating: params[:rating], status: 3, rated_by: current_user.id)
-      flash[:success] = "Rating updated successfully!"
+    authorize @objective
+    if @objective.update(rating: params[:rating], status: :Done, rated_by: current_user.id)
+      flash[:notice] = "Rating updated successfully."
     else
-      flash[:error] = "Failed to update rating."
+      flash[:alert] = "Failed to update rating."
     end
-
     redirect_back(fallback_location: root_path)
   end
 
   def unrate
+    authorize @objective
     @objective.rating = nil
     @objective.rated_by = nil
-    @objective.save
-    redirect_to root_path
+    if @objective.save
+      redirect_to root_path, notice: "Rating removed successfully."
+    else
+      redirect_to root_path, alert: "Failed to remove rating."
+    end
   end
 
   private
-
-  def require_ownership
-    unless @objective.employee == current_user
-      redirect_to root_path, alert: "You don't have permission to modify this objective."
-    end
-  end
-
-  def require_rater_role
-    unless current_user.role == "leader" || current_user.role == "admin"
-      redirect_to root_path, alert: "You don't have permission to rate objectives."
-    end
-  end
 
   def set_objective
     @objective = Objective.includes(:employee, :rater).find(params[:id])

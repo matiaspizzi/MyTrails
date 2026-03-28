@@ -2,7 +2,7 @@
   <p class="text-quaternary text-xs mb-2">Leader</p>
   <div class="flex items-center gap-4 mb-4">
     <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-secondary">
-      <%= image_tag(leader.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+      <%= image_tag(leader.profile_image.attached? ? leader.profile_image : 'default_profile.png', class: 'w-full h-full object-cover') %>
     </div>
     <div>
       <h1 class="text-lg text-secondary font-bold"><%= leader.name.titleize %> <%= leader.surname.titleize %></h1>
@@ -14,7 +14,7 @@
     <div class="flex items-center gap-4 mb-2 ml-8 justify-between">
       <div class="flex items-center gap-4">
         <div class="flex w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400">
-          <%= image_tag(leadership.employee.profile_image || 'default_profile.png', class: 'w-full h-full object-cover') %>
+          <%= image_tag(leadership.employee.profile_image.attached? ? leadership.employee.profile_image : 'default_profile.png', class: 'w-full h-full object-cover') %>
         </div>
         <div>
           <h1 class="text-base text-blue-400 font-bold"><%= leadership.employee.name.titleize %> <%= leadership.employee.surname.titleize %></h1>

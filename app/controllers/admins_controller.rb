@@ -2,6 +2,7 @@ class AdminsController < ApplicationController
   def dashboard
     if current_user.role != "admin"
       redirect_to root_path, alert: "You don't have permission to access this page."
+      return
     end
     if params[:query].present?
         @objectives = Objective.joins("INNER JOIN users ON users.id = objectives.employee_id")

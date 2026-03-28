@@ -8,4 +8,21 @@ class Objective < ApplicationRecord
   enum :status, { New: 0, In_Progress: 1, In_Review: 2, Done: 3 }, default: :New
 
   validates :status, presence: true
+
+  scope :in_review_first, -> {
+    order(Arel.sql("CASE WHEN status = 2 THEN 0 ELSE 1 END"), :status, :created_at)
+  }
+
+  scope :search, ->(query) {
+    joins("INNER JOIN users ON users.id = objectives.employee_id")
+      .where(
+        "objectives.title ILIKE :q
+         OR objectives.description ILIKE :q
+         OR users.name ILIKE :q
+         OR users.surname ILIKE :q
+         OR users.email_address ILIKE :q
+         OR CAST(objectives.estimated_completion_at AS TEXT) ILIKE :q",
+        q: "%#{sanitize_sql_like(query)}%"
+      )
+  }
 end

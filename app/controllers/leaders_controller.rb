@@ -1,8 +1,6 @@
 class LeadersController < ApplicationController
   def dashboard
-    if current_user.role != "leader"
-      redirect_to root_path, alert: "You don't have permission to access this page."
-    end
+    authorize current_user, :view_leader_dashboard?, policy_class: UserPolicy
     if params[:query].present?
         @objectives = Objective.joins("INNER JOIN users ON users.id = objectives.employee_id")
                                .where(employee_id: current_user.employees.pluck(:id))

@@ -1,15 +1,13 @@
 class LeadershipsController < ApplicationController
   def show
+    authorize Leadership
     @leaderships = Leadership.includes(:leader, :employee).all
     @leaderships_grouped_by_leader = @leaderships.group_by(&:leader)
-    if current_user.role != "admin"
-        redirect_to root_path, alert: "You don't have permission to access this page."
-        return
-    end
     render "admin/leaderships"
   end
 
   def create
+    authorize Leadership
     if leadership_params[:leader_email] == leadership_params[:employee_email]
       redirect_to leadership_path, alert: "Leader and employee cannot be the same."
       return
@@ -18,13 +16,17 @@ class LeadershipsController < ApplicationController
     @leader = User.find_by(email_address: leadership_params[:leader_email])
     @employee = User.find_by(email_address: leadership_params[:employee_email])
 
-    if @leader == nil || @employee == nil
-      redirect_to leadership_path, alert: (@leader == nil ? "Leader not found." : "Employee not found.")
+    if @leader.nil?
+      redirect_to leadership_path, alert: "Leader not found."
+      return
+    elsif @employee.nil?
+      redirect_to leadership_path, alert: "Employee not found."
       return
     elsif @leader.role != "leader"
-      redirect_to leadership_path, alert: @leader.name.titleize + " is not a leader."
+      redirect_to leadership_path, alert: "#{@leader.name.titleize} is not a leader."
       return
     end
+
     @leadership = Leadership.new(leader: @leader, employee: @employee)
     if @leadership.save
       redirect_to leadership_path, notice: "Leadership was successfully created."
@@ -34,11 +36,8 @@ class LeadershipsController < ApplicationController
   end
 
   def destroy
-    if current_user.role != "admin"
-      redirect_to root_path, alert: "You don't have permission to access this page."
-      return
-    end
     @leadership = Leadership.find(params[:id])
+    authorize @leadership
     @leadership.destroy
     redirect_to leadership_path, notice: "Leadership was successfully removed."
   end

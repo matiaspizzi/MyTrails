@@ -14,9 +14,9 @@ Rails.application.configure do
 
   config.active_storage.service = :local
 
-  config.assume_ssl = false
+  config.assume_ssl = true
 
-  config.force_ssl = false
+  config.force_ssl = true
 
   config.log_tags = [ :request_id ]
 
@@ -34,7 +34,7 @@ Rails.application.configure do
 
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST"), protocol: "https" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     user_name: ENV['MAILTRAP_USERNAME'],

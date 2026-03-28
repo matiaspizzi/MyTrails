@@ -14,9 +14,9 @@ Rails.application.configure do
 
   config.active_storage.service = :local
 
-  config.assume_ssl = false
+  config.assume_ssl = true
 
-  config.force_ssl = false
+  config.force_ssl = true
 
   config.log_tags = [ :request_id ]
 

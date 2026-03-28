@@ -30,17 +30,9 @@ class UsersController < ApplicationController
       render :account and return
     end
 
-    file = params[:user][:profile_image]
+    @user.profile_image.attach(params[:user][:profile_image])
 
-    if file.size > 1.megabyte
-      flash[:alert] = "The image is too large. The maximum size is 1MB."
-      render :account and return
-    end
-
-    base64_image = Base64.strict_encode64(file.read)
-    mime_type = file.content_type
-
-    if @user.update(profile_image: "data:#{mime_type};base64,#{base64_image}")
+    if @user.valid?
       redirect_to account_path, notice: "Profile image updated successfully."
     else
       flash[:alert] = @user.errors[:profile_image].first
@@ -51,7 +43,7 @@ class UsersController < ApplicationController
   def delete_profile_image
     @user = current_user
     authorize @user, :delete_profile_image?, policy_class: UserPolicy
-    @user.update!(profile_image: nil)
+    @user.profile_image.purge
     redirect_to account_path, notice: "Profile image deleted successfully."
   end
 end

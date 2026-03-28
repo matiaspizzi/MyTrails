@@ -59,9 +59,8 @@
         <% end %>
         <div class="flex items-center gap-2 text-sm">
           <p class="font-bold leading-4">Change Rating</p>
-          <%= form_with url: rate_objective_path, method: :post, id: "rating-form", local: true do |form| %>
+          <%= form_with url: rate_objective_path(@objective), method: :post, id: "rating-form", local: true do |form| %>
             <div>
-              <input type="hidden" name="id" id="objective-id" value="<%= @objective.id %>">
               <%= form.select :rating, 
                                 (1..5).map { |rating| [rating, rating] },
                                 { include_blank: true }, 

@@ -21,7 +21,7 @@
           <p class="text-quaternary text-sm"><%= leadership.employee.email_address %></p>
         </div>
       </div>
-      <%= form_with(model: leadership, url: leadership_path(leadership.id), method: :delete, local: true) do |form| %>
+      <%= form_with(url: leadership_path(leadership), method: :delete, local: true) do |form| %>
         <div class="flex justify-end">
           <%= button_tag type: "submit", class: "text-red-500 cursor-pointer" do %>
             <span class="material-icons">delete</span>

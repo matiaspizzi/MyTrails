@@ -9,7 +9,7 @@ class LeadershipsController < ApplicationController
   def create
     authorize Leadership
     if leadership_params[:leader_email] == leadership_params[:employee_email]
-      redirect_to leaderships_path, alert: "Leader and employee cannot be the same."
+      redirect_to leaderships_path, alert: t("leaderships.same_user")
       return
     end
 
@@ -17,21 +17,21 @@ class LeadershipsController < ApplicationController
     @employee = User.find_by(email_address: leadership_params[:employee_email])
 
     if @leader.nil?
-      redirect_to leaderships_path, alert: "Leader not found."
+      redirect_to leaderships_path, alert: t("leaderships.leader_not_found")
       return
     elsif @employee.nil?
-      redirect_to leaderships_path, alert: "Employee not found."
+      redirect_to leaderships_path, alert: t("leaderships.employee_not_found")
       return
     elsif !@leader.leader?
-      redirect_to leaderships_path, alert: "#{@leader.name.titleize} is not a leader."
+      redirect_to leaderships_path, alert: t("leaderships.not_a_leader", name: @leader.name.titleize)
       return
     end
 
     @leadership = Leadership.new(leader: @leader, employee: @employee)
     if @leadership.save
-      redirect_to leaderships_path, notice: "Leadership was successfully created."
+      redirect_to leaderships_path, notice: t("leaderships.created")
     else
-      redirect_to leaderships_path, alert: "Failed to create leadership."
+      redirect_to leaderships_path, alert: t("leaderships.create_failed")
     end
   end
 
@@ -39,7 +39,7 @@ class LeadershipsController < ApplicationController
     @leadership = Leadership.find(params[:id])
     authorize @leadership
     @leadership.destroy
-    redirect_to leaderships_path, notice: "Leadership was successfully removed."
+    redirect_to leaderships_path, notice: t("leaderships.destroyed")
   end
 
   private

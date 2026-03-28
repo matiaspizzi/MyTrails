@@ -1,5 +1,5 @@
 class LeadershipPolicy < ApplicationPolicy
-  def show? = user.role == "admin"
-  def create? = user.role == "admin"
-  def destroy? = user.role == "admin"
+  def show? = user.admin?
+  def create? = user.admin?
+  def destroy? = user.admin?
 end

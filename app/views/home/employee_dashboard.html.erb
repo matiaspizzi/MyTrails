@@ -25,6 +25,7 @@
       <p class="text-gray-500">You don't have any objectives yet</p>
     <% end %>
     <%= render partial: 'objective', collection: @objectives %>
+    <div class="mt-4 flex justify-center"><%== pagy_nav(@pagy) %></div>
   </div>
 </div>
 <div id="newObjectiveModal" class="fixed inset-0 flex items-center justify-center w-screen h-screen text-quaternary bg-primary bg-opacity-80" style="display: none;">

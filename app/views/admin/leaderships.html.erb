@@ -35,7 +35,7 @@
       <h2 class="text-xl font-bold text-secondary">New Leasership</h2>
       <button onClick="closeModal()" class="text-red-500 hover:text-gray-800 text-2xl">&times;</button>
     </div>
-    <%= form_with(model: Leadership.new, url: leadership_create_path, local: true) do |form| %>
+    <%= form_with(url: leaderships_path, local: true) do |form| %>
       <div class="mb-4">
         <p>Leader Email Address</p>
         <%= form.email_field :leader_email, class: "w-full p-2 rounded bg-tertiary", required: true %>

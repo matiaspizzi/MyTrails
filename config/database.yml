@@ -8,8 +8,13 @@ default: &default
   port: <%= ENV["POSTGRES_PORT"] %>
 
 development:
-  <<: *default
-  database: trails_development
+  primary:
+    <<: *default
+    database: trails_development
+  queue:
+    <<: *default
+    database: trails_queue_development
+    migrations_paths: db/queue_migrate
 
 test:
   <<: *default

@@ -1,10 +1,6 @@
 class ObjectivesController < ApplicationController
   before_action :set_objective, only: [ :destroy, :update, :rate, :unrate, :details ]
 
-  def index
-    redirect_to root_path
-  end
-
   def details
     authorize @objective
     render "objectives/details"

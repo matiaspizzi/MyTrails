@@ -3,10 +3,6 @@ class SessionsController < ApplicationController
   allow_unauthenticated_access only: %i[ destroy ] # edgecase to deal with email confirmations
   rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: I18n.t("errors.try_again_later") }
 
-  def session_params
-    params.permit(:email_address, :password)
-  end
-
   def new
   end
 

@@ -1,31 +1,47 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  errors:
+    unauthorized: "You don't have permission to access this page."
+    try_again_later: "Try again later."
+
+  sessions:
+    created: "Signed in successfully."
+    invalid_credentials: "Invalid email or password."
+    destroyed: "Signed out successfully."
+
+  passwords:
+    reset_sent: "Password reset instructions sent (if a user with that email address exists)."
+    reset_success: "Password has been reset."
+    mismatch: "Passwords did not match."
+    invalid_token: "Password reset link is invalid or has expired."
+
+  registrations:
+    created: "Account created successfully."
+
+  objectives:
+    created: "Objective was successfully created."
+    create_failed: "Failed to create objective."
+    updated: "Objective status updated successfully."
+    update_failed: "Failed to update objective status."
+    deleted: "Objective deleted successfully."
+    delete_denied: "You can't delete a completed objective."
+    rated: "Rating updated successfully."
+    rate_failed: "Failed to update rating."
+    unrated: "Rating removed successfully."
+    unrate_failed: "Failed to remove rating."
+    not_found: "We could not find the objective you are looking for."
+
+  users:
+    profile_image:
+      updated: "Profile image updated successfully."
+      deleted: "Profile image deleted successfully."
+      no_image: "No image selected."
+      too_large: "The image is too large. The maximum size is 1MB."
+
+  leaderships:
+    created: "Leadership was successfully created."
+    create_failed: "Failed to create leadership."
+    destroyed: "Leadership was successfully removed."
+    same_user: "Leader and employee cannot be the same."
+    leader_not_found: "Leader not found."
+    employee_not_found: "Employee not found."
+    not_a_leader: "%{name} is not a leader."

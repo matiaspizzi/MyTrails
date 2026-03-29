@@ -6,8 +6,8 @@ Rails.application.configure do
     policy.font_src    :self, :https, :data, "https://fonts.gstatic.com"
     policy.img_src     :self, :https, :data, :blob
     policy.object_src  :none
-    policy.script_src  :self, :https, :nonce
-    policy.style_src   :self, :https, :nonce, "https://fonts.googleapis.com"
+    policy.script_src  :self, :https
+    policy.style_src   :self, :https, "https://fonts.googleapis.com"
     policy.connect_src :self
     policy.frame_src   :none
     policy.base_uri    :self

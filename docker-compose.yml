@@ -18,6 +18,20 @@ services:
     build: .
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_MAX_THREADS: ${RAILS_MAX_THREADS:-3}
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
+      RAILS_LOG_LEVEL: ${RAILS_LOG_LEVEL:-info}
+      SOLID_QUEUE_IN_PUMA: ${SOLID_QUEUE_IN_PUMA:-true}
+      MAILTRAP_USERNAME: ${MAILTRAP_USERNAME}
+      MAILTRAP_PASSWORD: ${MAILTRAP_PASSWORD}
+      RAILS_ENV: ${RAILS_ENV:-development}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails server -b '0.0.0.0'"
     volumes:
       - ".:/myapp"

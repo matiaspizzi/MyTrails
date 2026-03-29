@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   allow_unauthenticated_access only: [ :new, :create ]
   allow_unauthenticated_access only: %i[ destroy ] # edgecase to deal with email confirmations
-  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
+  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: I18n.t("errors.try_again_later") }
 
   def new
   end
@@ -11,9 +11,9 @@ class SessionsController < ApplicationController
     user = User.find_by(email_address: params[:email_address])
     if user&.authenticate(params[:password])
       start_new_session_for(user)
-      redirect_to root_path, notice: "Signed in successfully."
+      redirect_to root_path, notice: t("sessions.created")
     else
-      flash.now[:alert] = "Invalid email or password."
+      flash.now[:alert] = t("sessions.invalid_credentials")
       render :new, status: :unprocessable_entity
     end
   end

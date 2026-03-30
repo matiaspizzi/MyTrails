@@ -7,7 +7,7 @@ class LeadershipsController < ApplicationController
   end
 
   def create
-    authorize Leadership
+    authorize Leadership, :create?
     if leadership_params[:leader_email] == leadership_params[:employee_email]
       redirect_to leaderships_path, alert: t("leaderships.same_user")
       return

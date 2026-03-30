@@ -1,10 +1,4 @@
-<script>
-  function redirectToObjective(objectiveId) {
-    console.log('Redirecting to objective:', objectiveId);
-    window.location.href = "objective/" + objectiveId;
-  }
-</script>
-<div class="bg-primary px-4 py-6 text-quaternary min-h-screen">
+<div class="bg-primary px-4 py-6 text-quaternary min-h-screen" data-controller="redirect">
   <h1 class="text-3xl font-bold mb-6 text-white">Leader Dashboard</h1>
   <p class="mb-4">Your team's objectives</p>
   <div class="mb-4">
@@ -29,9 +23,9 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <% @objectives.each do |objective| %>
-          <tr class="hover:bg-tertiary hover:text-quaternary transition-colors duration-200 cursor-pointer" 
-              data-id="<%= objective.id %>" 
-              onClick="redirectToObjective(<%= objective.id %>)">
+          <tr class="hover:bg-tertiary hover:text-quaternary transition-colors duration-200 cursor-pointer"
+              data-action="click->redirect#visit"
+              data-redirect-url-param="<%= details_objective_path(objective) %>">
             <td class="px-6 py-4 whitespace-nowrap">
               <%= objective.employee.name.capitalize %> <%= objective.employee.surname.capitalize %>
             </td>

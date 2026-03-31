@@ -16,13 +16,13 @@
         </div>
       </div>
       <% unless user.admin? %>
-        <%= form_with(model: user, url: set_user_role_path(user), method: :patch, local: true) do |form| %>
+        <%= form_with(model: user, url: set_user_role_path(user), method: :patch, data: { turbo: false, controller: "form-submit" }) do |form| %>
           <div>
-            <%= form.select :role, 
+            <%= form.select :role,
                 ['leader', 'employee'].map { |key| [key.titleize, key] },
-                { include_blank: false }, 
+                { include_blank: false },
                 class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
-                onchange: 'this.form.submit()' %>
+                data: { action: "change->form-submit#submit" } %>
           </div>
         <% end %>
       <% end %>

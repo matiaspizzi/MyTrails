@@ -4,16 +4,20 @@ export default class extends Controller {
   static targets = ["dialog"]
 
   open() {
-    this.dialogTarget.style.display = "flex"
+    this.dialogTarget.classList.remove("hidden")
   }
 
   close() {
-    this.dialogTarget.style.display = "none"
+    this.dialogTarget.classList.add("hidden")
   }
 
   closeOnBackdrop(event) {
     if (event.target === this.dialogTarget) {
       this.close()
     }
+  }
+
+  disconnect() {
+    this.dialogTarget.classList.add("hidden")
   }
 }

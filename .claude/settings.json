@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/matia/Desktop/repos/mytrails/app/validators -type f -name *.rb)",
+      "Bash(/tmp/routes_analysis.txt:*)",
+      "Read(//tmp/**)",
+      "Bash(grep -rn \"\\\\.account\\\\|\\\\.authentification\\\\|\\\\.about\" /c/Users/matia/Desktop/repos/mytrails/app/ --include=*.rb --include=*.html*)",
+      "Read(//c/Users/matia/Desktop/repos/mytrails/**)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(\"/c/Program Files/GitHub:*)",
+      "Bash(grep -r \"blob\\\\|active_storage\" c:/Users/matia/Desktop/repos/mytrails/app/views/ --include=*.erb)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" pr list --author \"app/dependabot\" --state open)",
+      "Bash(bundle update:*)",
+      "Read(//c/Ruby34-x64/lib/ruby/gems/3.4.0/gems/pagy-9.4.0/lib/pagy/extras/**)",
+      "Bash(pg_ctl start:*)",
+      "Bash(net start:*)",
+      "Bash(pg_isready)",
+      "Bash(bundle exec:*)",
+      "Bash(grep -r ENV[ c:/Users/matia/Desktop/repos/mytrails/config/ c:/Users/matia/Desktop/repos/mytrails/Procfile* c:/Users/matia/Desktop/repos/mytrails/Dockerfile* --include=*.rb --include=*.yml --include=Dockerfile* --include=Procfile* -h)",
+      "Bash(ls c:/Users/matia/Desktop/repos/mytrails/.env*)",
+      "Read(//c/Ruby34-x64/lib/ruby/gems/3.4.0/gems/solid_queue-1.4.0/db/**)",
+      "Read(//c/Ruby34-x64/lib/ruby/gems/3.4.0/gems/solid_queue-1.4.0/**)",
+      "Read(//c/Ruby34-x64/lib/ruby/gems/3.4.0/gems/**)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r PagesController --include=*.rb --include=*.erb)",
+      "Bash(grep -r objectives.*index --include=*.rb --include=*.erb)",
+      "Bash(grep -r \"stimulus\\\\|Stimulus\" /c/Users/matia/Desktop/repos/mytrails/config --include=*.rb)",
+      "Bash(grep -o \"[a-z_]*_path\\\\|[a-z_]*_url\" /c/Users/matia/Desktop/repos/mytrails/app/views/**/*.erb)",
+      "Bash(rails routes:*)",
+      "Bash(grep -E \"authorize.*::\" /c/Users/matia/Desktop/repos/mytrails/app/controllers/**/*.rb)",
+      "Bash(grep -n 'render ' /c/Users/matia/Desktop/repos/mytrails/app/controllers/*.rb)",
+      "Bash(grep -n \"window.open\\\\|location\\\\|navigate\" /c/Users/matia/Desktop/repos/MyTrails/app/javascript/controllers/*.js)",
+      "Bash(find c:/Users/matia/Desktop/repos/MyTrails -path */pagy*)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  }
+}

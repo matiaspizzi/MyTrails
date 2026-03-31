@@ -16,13 +16,13 @@
     </div>
     <% if !objective.rating.present? %>
       <div class="flex gap-4 items-center align-middle">
-        <%= form_with(model: objective, local: true) do |form| %>
+        <%= form_with(model: objective, data: { turbo: false, controller: "form-submit" }) do |form| %>
           <div>
-            <%= form.select :status, 
+            <%= form.select :status,
                                   Objective.statuses.map { |key, _value| [key.titleize, key] },
-                                  { include_blank: false }, 
+                                  { include_blank: false },
                                   class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
-                                  onchange: 'this.form.submit()' %>
+                                  data: { action: "change->form-submit#submit" } %>
           </div>
         <% end %>
         <%= form_with(model: objective, url: objective_path(objective), method: :delete, local: true) do |form| %>

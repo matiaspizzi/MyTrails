@@ -21,3 +21,37 @@
 .animate-marquee {
   animation: marquee 1s linear infinite;
 }
+
+.pagy-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pagy-nav .page a,
+.pagy-nav .page.active,
+.pagy-nav .page.prev a,
+.pagy-nav .page.next a,
+.pagy-nav .page.gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  color: #a4b1cd;
+  text-decoration: none;
+}
+
+.pagy-nav .page a:hover,
+.pagy-nav .page.prev a:hover,
+.pagy-nav .page.next a:hover {
+  background-color: #202837;
+  color: #9fef00;
+}
+
+.pagy-nav .page.active {
+  background-color: #202837;
+  color: #9fef00;
+  font-weight: 700;
+}

@@ -59,13 +59,13 @@
         <% end %>
         <div class="flex items-center gap-2 text-sm">
           <p class="font-bold leading-4">Change Rating</p>
-          <%= form_with url: rate_objective_path(@objective), method: :post, id: "rating-form", local: true do |form| %>
+          <%= form_with url: rate_objective_path(@objective), method: :post, data: { turbo: false, controller: "form-submit" } do |form| %>
             <div>
-              <%= form.select :rating, 
+              <%= form.select :rating,
                                 (1..5).map { |rating| [rating, rating] },
-                                { include_blank: true }, 
+                                { include_blank: true },
                                 class: "rounded-sm bg-tertiary text-quaternary text-sm py-1",
-                                onchange: 'this.form.submit()' %>
+                                data: { action: "change->form-submit#submit" } %>
             </div>
           <% end %>
         </div>

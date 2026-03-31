@@ -7,7 +7,7 @@ Rails.application.configure do
     policy.img_src     :self, :https, :data, :blob
     policy.object_src  :none
     policy.script_src  :self, :https
-    policy.style_src   :self, :https, "https://fonts.googleapis.com"
+    policy.style_src   :self, :https, "https://fonts.googleapis.com", :unsafe_inline
     policy.connect_src :self
     policy.frame_src   :none
     policy.base_uri    :self
@@ -16,5 +16,5 @@ Rails.application.configure do
 
   # Attach a per-request nonce to importmap inline scripts and inline styles.
   config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-  config.content_security_policy_nonce_directives = %w[script-src style-src]
+  config.content_security_policy_nonce_directives = %w[script-src]
 end
